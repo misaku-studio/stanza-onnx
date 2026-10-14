@@ -1,0 +1,14 @@
+{
+  "language": "nl",
+  "description": "Original verification texts authored for this project; not an accuracy evaluation corpus.",
+  "texts": [
+    {"id": "reading", "text": "Mira leest een kort verhaal bij het raam."},
+    {"id": "apostrophes", "text": "'s Morgens staan de fietsen naast het station."},
+    {"id": "sentences", "text": "De trein komt om 8:30. Heb je mijn kaartje?"},
+    {"id": "unicode_offsets", "text": "Een kat 🐈 kijkt naar het café. 🌿 De plant groeit."},
+    {"id": "line_breaks", "text": "Eerste zin.\n\nTweede\tzin!"},
+    {"id": "underscore", "text": "_"},
+    {"id": "empty", "text": ""},
+    {"id": "whitespace", "text": " \t\n "}
+  ]
+}

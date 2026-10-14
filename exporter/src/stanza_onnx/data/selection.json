@@ -1,0 +1,1074 @@
+{
+  "af": {
+    "language_name": "Afrikaans",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "afribooms",
+      "pos": "afribooms_nocharlm",
+      "lemma": "afribooms_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "ang": {
+    "language_name": "Old English",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "nerthus_nocharlm",
+      "pos": "nerthus_nocharlm",
+      "lemma": "nerthus_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "ar": {
+    "language_name": "Arabic",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "padt",
+      "mwt": "padt",
+      "pos": "padt_nocharlm",
+      "lemma": "padt_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "bg": {
+    "language_name": "Bulgarian",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "btb",
+      "pos": "btb_nocharlm",
+      "lemma": "btb_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "bn": {
+    "language_name": "Bengali",
+    "profile": "default",
+    "pipeline_available": false,
+    "processors": {},
+    "selection_changes": []
+  },
+  "da": {
+    "language_name": "Danish",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "ddt",
+      "pos": "ddt_nocharlm",
+      "lemma": "ddt_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "de": {
+    "language_name": "German",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "combined",
+      "mwt": "combined",
+      "pos": "combined_nocharlm",
+      "lemma": "combined_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "en": {
+    "language_name": "English",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "combined",
+      "mwt": "combined",
+      "pos": "combined_nocharlm",
+      "lemma": "combined_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "es": {
+    "language_name": "Spanish",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "combined",
+      "mwt": "combined",
+      "pos": "combined_nocharlm",
+      "lemma": "combined_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "fa": {
+    "language_name": "Persian",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "perdt",
+      "mwt": "perdt",
+      "pos": "perdt_nocharlm",
+      "lemma": "perdt_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "fi": {
+    "language_name": "Finnish",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "tdt",
+      "mwt": "tdt",
+      "pos": "tdt_nocharlm",
+      "lemma": "tdt_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "fr": {
+    "language_name": "French",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "combined",
+      "mwt": "combined",
+      "pos": "combined_nocharlm",
+      "lemma": "combined_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "he": {
+    "language_name": "Hebrew",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "combined_nocharlm",
+      "mwt": "combined",
+      "pos": "combined_nocharlm",
+      "lemma": "combined_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "hi": {
+    "language_name": "Hindi",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "hdtb",
+      "pos": "hdtb_nocharlm",
+      "lemma": "hdtb_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "id": {
+    "language_name": "Indonesian",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "gsd",
+      "mwt": "gsd",
+      "pos": "gsd_nocharlm",
+      "lemma": "gsd_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "it": {
+    "language_name": "Italian",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "combined",
+      "mwt": "combined",
+      "pos": "combined_nocharlm",
+      "lemma": "combined_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "ja": {
+    "language_name": "Japanese",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "combined_nocharlm",
+      "pos": "combined_nocharlm",
+      "lemma": "combined_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "kk": {
+    "language_name": "Kazakh",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "ktb",
+      "mwt": "ktb",
+      "pos": "ktb_nocharlm",
+      "lemma": "ktb_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "ml": {
+    "language_name": "Malayalam",
+    "profile": "default",
+    "pipeline_available": false,
+    "processors": {},
+    "selection_changes": []
+  },
+  "mr": {
+    "language_name": "Marathi",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "ufal",
+      "mwt": "ufal",
+      "pos": "ufal_nocharlm",
+      "lemma": "ufal_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "my": {
+    "language_name": "Myanmar",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "alt"
+    },
+    "selection_changes": []
+  },
+  "nb": {
+    "language_name": "Norwegian",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "bokmaal",
+      "pos": "bokmaal_nocharlm",
+      "lemma": "bokmaal_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "nl": {
+    "language_name": "Dutch",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "alpino",
+      "mwt": "alpino",
+      "pos": "alpino_nocharlm",
+      "lemma": "alpino_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "pl": {
+    "language_name": "Polish",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "pdb",
+      "mwt": "pdb",
+      "pos": "pdb_nocharlm",
+      "lemma": "pdb_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "pt": {
+    "language_name": "Portuguese",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "bosque",
+      "mwt": "bosque",
+      "pos": "bosque_nocharlm",
+      "lemma": "bosque_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "ru": {
+    "language_name": "Russian",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "syntagrus",
+      "pos": "syntagrus_nocharlm",
+      "lemma": "syntagrus_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "sd": {
+    "language_name": "Sindhi",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "isra",
+      "pos": "isra_charlm",
+      "lemma": "isra_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "si": {
+    "language_name": "Sinhala",
+    "profile": "default",
+    "pipeline_available": false,
+    "processors": {},
+    "selection_changes": []
+  },
+  "sv": {
+    "language_name": "Swedish",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "talbanken",
+      "pos": "talbanken_nocharlm",
+      "lemma": "talbanken_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "te": {
+    "language_name": "Telugu",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "mtg",
+      "pos": "mtg_nocharlm",
+      "lemma": "identity"
+    },
+    "selection_changes": []
+  },
+  "th": {
+    "language_name": "Thai",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "tud",
+      "pos": "tud_charlm",
+      "lemma": "identity"
+    },
+    "selection_changes": []
+  },
+  "tr": {
+    "language_name": "Turkish",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "imst",
+      "mwt": "imst",
+      "pos": "imst_nocharlm",
+      "lemma": "imst_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "uk": {
+    "language_name": "Ukrainian",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "iu",
+      "mwt": "iu",
+      "pos": "iu_nocharlm",
+      "lemma": "iu_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "vi": {
+    "language_name": "Vietnamese",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "vtb",
+      "pos": "vtb_nocharlm",
+      "lemma": "identity"
+    },
+    "selection_changes": []
+  },
+  "zh-hans": {
+    "language_name": "Simplified Chinese",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "gsdsimp",
+      "pos": "gsdsimp_nocharlm",
+      "lemma": "gsdsimp_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "ca": {
+    "language_name": "Catalan",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "ancora",
+      "mwt": "ancora",
+      "pos": "ancora_nocharlm",
+      "lemma": "ancora_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "cs": {
+    "language_name": "Czech",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "pdt",
+      "mwt": "pdt",
+      "pos": "pdt_nocharlm",
+      "lemma": "pdt_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "nn": {
+    "language_name": "Norwegian Nynorsk",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "nynorsk",
+      "pos": "nynorsk_nocharlm",
+      "lemma": "nynorsk_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "ta": {
+    "language_name": "Tamil",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "ttb",
+      "mwt": "ttb",
+      "pos": "ttb_nocharlm",
+      "lemma": "ttb_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "be": {
+    "language_name": "Belarusian",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "hse",
+      "pos": "hse_nocharlm",
+      "lemma": "hse_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "bxr": {
+    "language_name": "Buryat",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "bdt",
+      "pos": "bdt_nocharlm",
+      "lemma": "bdt_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "cop": {
+    "language_name": "Coptic",
+    "profile": "default",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "scriptorium",
+      "mwt": "scriptorium",
+      "pos": "scriptorium_nopretrain",
+      "lemma": "scriptorium_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "cu": {
+    "language_name": "Old Church Slavonic",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "proiel",
+      "pos": "proiel_nocharlm",
+      "lemma": "proiel_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "cy": {
+    "language_name": "Welsh",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "ccg",
+      "mwt": "ccg",
+      "pos": "ccg_nocharlm",
+      "lemma": "ccg_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "el": {
+    "language_name": "Greek",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "gdt",
+      "mwt": "gdt",
+      "pos": "gdt_nocharlm",
+      "lemma": "gdt_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "et": {
+    "language_name": "Estonian",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "edt",
+      "mwt": "edt",
+      "pos": "edt_nocharlm",
+      "lemma": "edt_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "eu": {
+    "language_name": "Basque",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "bdt",
+      "pos": "bdt_nocharlm",
+      "lemma": "bdt_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "fo": {
+    "language_name": "Faroese",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "farpahc",
+      "mwt": "farpahc",
+      "pos": "farpahc_nocharlm",
+      "lemma": "identity"
+    },
+    "selection_changes": []
+  },
+  "fro": {
+    "language_name": "Old French",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "profiterole",
+      "pos": "profiterole_nocharlm",
+      "lemma": "profiterole_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "ga": {
+    "language_name": "Irish",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "idt",
+      "pos": "idt_nocharlm",
+      "lemma": "idt_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "gd": {
+    "language_name": "Scottish Gaelic",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "arcosg",
+      "mwt": "arcosg",
+      "pos": "arcosg_nocharlm",
+      "lemma": "arcosg_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "gl": {
+    "language_name": "Galician",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "ctg",
+      "mwt": "ctg",
+      "pos": "ctg_nocharlm",
+      "lemma": "ctg_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "got": {
+    "language_name": "Gothic",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "proiel",
+      "pos": "proiel_nocharlm",
+      "lemma": "proiel_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "grc": {
+    "language_name": "Ancient Greek",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "perseus",
+      "pos": "perseus_nocharlm",
+      "lemma": "perseus_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "gv": {
+    "language_name": "Manx",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "cadhan",
+      "mwt": "cadhan",
+      "pos": "cadhan_nocharlm",
+      "lemma": "cadhan_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "hbo": {
+    "language_name": "Ancient Hebrew",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "ptnk",
+      "mwt": "ptnk",
+      "pos": "ptnk_nocharlm",
+      "lemma": "ptnk_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "hr": {
+    "language_name": "Croatian",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "set",
+      "pos": "set_nocharlm",
+      "lemma": "set_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "hsb": {
+    "language_name": "Upper Sorbian",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "ufal",
+      "pos": "ufal_nocharlm",
+      "lemma": "ufal_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "hu": {
+    "language_name": "Hungarian",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "szeged",
+      "pos": "szeged_nocharlm",
+      "lemma": "szeged_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "hy": {
+    "language_name": "Armenian",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "armtdp",
+      "mwt": "armtdp",
+      "pos": "armtdp_nocharlm",
+      "lemma": "armtdp_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "hyw": {
+    "language_name": "Western Armenian",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "armtdp",
+      "mwt": "armtdp",
+      "pos": "armtdp_nocharlm",
+      "lemma": "armtdp_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "is": {
+    "language_name": "Icelandic",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "icepahc",
+      "mwt": "icepahc",
+      "pos": "icepahc_nocharlm",
+      "lemma": "icepahc_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "ka": {
+    "language_name": "Georgian",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "glc",
+      "mwt": "glc",
+      "pos": "glc_nocharlm",
+      "lemma": "glc_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "kmr": {
+    "language_name": "Northern Kurdish",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "mg",
+      "mwt": "mg",
+      "pos": "mg_nocharlm",
+      "lemma": "mg_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "ko": {
+    "language_name": "Korean",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "kaist",
+      "pos": "kaist_nocharlm",
+      "lemma": "kaist_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "kpv": {
+    "language_name": "Komi Zyrian",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "lattice",
+      "mwt": "lattice",
+      "pos": "lattice_nocharlm",
+      "lemma": "lattice_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "ky": {
+    "language_name": "Kyrgyz",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "ktmu",
+      "pos": "ktmu_nocharlm",
+      "lemma": "ktmu_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "la": {
+    "language_name": "Latin",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "ittb",
+      "mwt": "ittb",
+      "pos": "ittb_nocharlm",
+      "lemma": "ittb_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "lij": {
+    "language_name": "Ligurian",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "glt",
+      "mwt": "glt",
+      "pos": "glt_nocharlm",
+      "lemma": "glt_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "lt": {
+    "language_name": "Lithuanian",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "alksnis",
+      "pos": "alksnis_nocharlm",
+      "lemma": "alksnis_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "lv": {
+    "language_name": "Latvian",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "lvtb",
+      "pos": "lvtb_nocharlm",
+      "lemma": "lvtb_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "lzh": {
+    "language_name": "Classical Chinese",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "kyoto",
+      "pos": "kyoto_nocharlm",
+      "lemma": "kyoto_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "mt": {
+    "language_name": "Maltese",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "mudt",
+      "pos": "mudt_nocharlm",
+      "lemma": "identity"
+    },
+    "selection_changes": []
+  },
+  "myv": {
+    "language_name": "Erzya",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "jr",
+      "mwt": "jr",
+      "pos": "jr_nocharlm",
+      "lemma": "jr_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "nds": {
+    "language_name": "Low Saxon",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "lsdc",
+      "pos": "lsdc_nocharlm",
+      "lemma": "lsdc_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "orv": {
+    "language_name": "Old East Slavic",
+    "profile": "default",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "torot",
+      "pos": "torot_nopretrain",
+      "lemma": "torot_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "ota": {
+    "language_name": "Ottoman Turkish",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "boun",
+      "mwt": "boun",
+      "pos": "boun_nocharlm",
+      "lemma": "boun_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "pcm": {
+    "language_name": "Naija",
+    "profile": "default",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "nsc",
+      "pos": "nsc_nopretrain",
+      "lemma": "nsc_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "qaf": {
+    "language_name": "Maghrebi Arabic French",
+    "profile": "default",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "arabizi",
+      "mwt": "arabizi",
+      "pos": "arabizi_nopretrain",
+      "lemma": "arabizi_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "qpm": {
+    "language_name": "Pomak",
+    "profile": "default",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "philotis",
+      "pos": "philotis_nopretrain",
+      "lemma": "philotis_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "qtd": {
+    "language_name": "Turkish German",
+    "profile": "default",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "sagt",
+      "mwt": "sagt",
+      "pos": "sagt_nopretrain",
+      "lemma": "sagt_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "ro": {
+    "language_name": "Romanian",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "rrt",
+      "pos": "rrt_nocharlm",
+      "lemma": "rrt_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "sa": {
+    "language_name": "Sanskrit",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "vedic",
+      "pos": "vedic_nocharlm",
+      "lemma": "vedic_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "sk": {
+    "language_name": "Slovak",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "snk",
+      "mwt": "snk",
+      "pos": "snk_nocharlm",
+      "lemma": "snk_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "sl": {
+    "language_name": "Slovenian",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "ssj",
+      "pos": "ssj_nocharlm",
+      "lemma": "ssj_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "sme": {
+    "language_name": "North Sami",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "giella",
+      "pos": "giella_nocharlm",
+      "lemma": "giella_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "sq": {
+    "language_name": "Albanian",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "combined",
+      "mwt": "combined",
+      "pos": "combined_nocharlm",
+      "lemma": "combined_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "sr": {
+    "language_name": "Serbian",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "set",
+      "pos": "set_nocharlm",
+      "lemma": "set_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "ug": {
+    "language_name": "Uyghur",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "udt",
+      "pos": "udt_nocharlm",
+      "lemma": "udt_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "ur": {
+    "language_name": "Urdu",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "udtb",
+      "pos": "udtb_nocharlm",
+      "lemma": "udtb_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "wo": {
+    "language_name": "Wolof",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "wtb",
+      "mwt": "wtb",
+      "pos": "wtb_nocharlm",
+      "lemma": "wtb_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "xcl": {
+    "language_name": "Classical Armenian",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "caval",
+      "mwt": "caval",
+      "pos": "caval_nocharlm",
+      "lemma": "caval_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "zh-hant": {
+    "language_name": "Traditional Chinese",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "gsd",
+      "pos": "gsd_nocharlm",
+      "lemma": "gsd_nocharlm"
+    },
+    "selection_changes": []
+  },
+  "or": {
+    "language_name": "Odia",
+    "profile": "default",
+    "pipeline_available": false,
+    "processors": {},
+    "selection_changes": []
+  },
+  "ab": {
+    "language_name": "Abkhazian",
+    "profile": "default_fast",
+    "pipeline_available": true,
+    "processors": {
+      "tokenize": "abnc_nocharlm",
+      "pos": "abnc_nocharlm",
+      "lemma": "abnc_nocharlm"
+    },
+    "selection_changes": []
+  }
+}

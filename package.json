@@ -1,0 +1,51 @@
+{
+  "name": "stanza-onnx",
+  "version": "0.2.0",
+  "description": "JavaScript adapter for the native Stanza ONNX runtime",
+  "type": "module",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/misaku-studio/stanza-onnx.git"
+  },
+  "homepage": "https://github.com/misaku-studio/stanza-onnx#readme",
+  "bugs": "https://github.com/misaku-studio/stanza-onnx/issues",
+  "exports": {
+    ".": {
+      "types": "./dist/native.d.ts",
+      "import": "./dist/native.js"
+    },
+    "./native": {
+      "types": "./dist/native.d.ts",
+      "import": "./dist/native.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "NOTICE",
+    "docs",
+    "examples",
+    "LICENSE-UNICODE"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "build:tests": "tsc -p tsconfig.tests.json",
+    "test": "npm run build:tests && node --test ./.cache/adapter-tests/adapters-tests/native.test.js",
+    "test:exporter": "python -m unittest discover -s exporter/tests -v",
+    "test:tools": "python -m unittest discover -s scripts/tests -v",
+    "prepack": "npm run build",
+    "format:js": "prettier --write adapters adapters-tests examples",
+    "format:js:check": "prettier --check adapters adapters-tests examples"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "typescript": "5.9.3",
+    "prettier": "3.6.2"
+  }
+}

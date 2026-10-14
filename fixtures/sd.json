@@ -1,0 +1,14 @@
+{
+  "language": "sd",
+  "description": "Original verification texts authored for this project; not an accuracy evaluation corpus.",
+  "texts": [
+    {"id": "reading", "text": "ميرا دريءَ وٽ ڪتاب پڙهي ٿي."},
+    {"id": "sentences", "text": "اڄ مينهن پوي ٿو. اسان سڀاڻي باغ ۾ وينداسين."},
+    {"id": "numbers", "text": "ريل 8:30 تي اچي ٿي ۽ ٽڪيٽ 25 رپيا آهي."},
+    {"id": "unicode_offsets", "text": "ٻلي 🐈 Café ڏانهن ڏسي ٿي. 🌿 ٻوٽو وڌي ٿو."},
+    {"id": "line_breaks", "text": "پهريون جملو.\n\nٻيو\tجملو!"},
+    {"id": "underscore", "text": "_"},
+    {"id": "empty", "text": ""},
+    {"id": "whitespace", "text": " \t\n "}
+  ]
+}

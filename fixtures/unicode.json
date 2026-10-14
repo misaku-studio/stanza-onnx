@@ -1,0 +1,198 @@
+{
+  "description": "Original Unicode feature and source-offset verification texts authored for this project. Synthetic cross-language execution checks, not a linguistic accuracy corpus. Strings retain their exact original code points; no normalization is applied.",
+  "unicodeVersion": "18.0.0",
+  "codePointProvenance": "UnicodeData.txt and DerivedCoreProperties.txt, Unicode Character Database 18.0.0 (official data copied in the local rust-unic UCD cache).",
+  "texts": [
+    {
+      "id": "cyrillic_tje_16",
+      "text": "Ᲊ ᲊ Ᲊest ᲊest.",
+      "coverage": [
+        "Unicode16 Cyrillic Tje uppercase/lowercase"
+      ]
+    },
+    {
+      "id": "garay_casing_16",
+      "text": "𐵐𐵑 𐵰𐵱.",
+      "coverage": [
+        "Unicode16 Garay case pairs",
+        "astral letters"
+      ]
+    },
+    {
+      "id": "beria_erfe_casing_17",
+      "text": "𖺠𖺡 𖺻𖺼.",
+      "coverage": [
+        "Unicode17 Beria Erfe case pairs",
+        "astral letters"
+      ]
+    },
+    {
+      "id": "closed_omega_casing_18",
+      "text": "꟝ ɷ ꟝word ɷword.",
+      "coverage": [
+        "Unicode18 Latin capital closed omega"
+      ]
+    },
+    {
+      "id": "mixed_new_cased",
+      "text": "Ᲊ𐵐𖺠꟝ ᲊ𐵰𖺻ɷ.",
+      "coverage": [
+        "mixed Unicode16–18 casing"
+      ]
+    },
+    {
+      "id": "pao_decimal_16",
+      "text": "Pao 𑛐𑛑𑛒𑛓𑛔𑛕𑛖𑛗𑛘𑛙.",
+      "coverage": [
+        "Unicode16 Myanmar Pao Nd digits"
+      ]
+    },
+    {
+      "id": "pwo_karen_decimal_16",
+      "text": "Karen 𑛚𑛛𑛜𑛝𑛞𑛟𑛠𑛡𑛢𑛣.",
+      "coverage": [
+        "Unicode16 Myanmar Eastern Pwo Karen Nd digits"
+      ]
+    },
+    {
+      "id": "kirat_rai_decimal_16",
+      "text": "Rai 𖵰𖵱𖵲𖵳𖵴𖵵𖵶𖵷𖵸𖵹.",
+      "coverage": [
+        "Unicode16 Kirat Rai Nd digits"
+      ]
+    },
+    {
+      "id": "sunuwar_decimal_16",
+      "text": "Sunuwar 𑯰𑯱𑯲𑯳𑯴𑯵𑯶𑯷𑯸𑯹.",
+      "coverage": [
+        "Unicode16 Sunuwar Nd digits"
+      ]
+    },
+    {
+      "id": "mixed_new_decimal",
+      "text": "𑛑𖵲𑯳, 𑛑.𖵲 and 12𑯳.",
+      "coverage": [
+        "new decimal feature classification",
+        "mixed Nd scripts"
+      ]
+    },
+    {
+      "id": "sigma_bengali_mark_final_18",
+      "text": "AΣ𑷰",
+      "coverage": [
+        "FinalSigma skips new Unicode18 Mn after sigma"
+      ]
+    },
+    {
+      "id": "sigma_bengali_mark_medial_18",
+      "text": "AΣ𑷰꟝",
+      "coverage": [
+        "FinalSigma skips new Mn then sees new Unicode18 cased neighbor"
+      ]
+    },
+    {
+      "id": "sigma_bengali_mark_before_18",
+      "text": "A𑷰Σ",
+      "coverage": [
+        "FinalSigma skips new Mn before sigma"
+      ]
+    },
+    {
+      "id": "sigma_music_mark_final_18",
+      "text": "AΣ𝄧",
+      "coverage": [
+        "FinalSigma skips new Unicode18 musical combining stress"
+      ]
+    },
+    {
+      "id": "sigma_music_mark_medial_18",
+      "text": "AΣ𝄧𖺠",
+      "coverage": [
+        "FinalSigma skips astral Mn then sees Unicode17 cased neighbor"
+      ]
+    },
+    {
+      "id": "sigma_armenian_ignorable_final_18",
+      "text": "AΣ՘",
+      "coverage": [
+        "Unicode18 cased-and-case-ignorable Armenian modifier skipped"
+      ]
+    },
+    {
+      "id": "sigma_armenian_ignorable_medial_18",
+      "text": "AΣ՘B",
+      "coverage": [
+        "cased-and-case-ignorable property intersection"
+      ]
+    },
+    {
+      "id": "sigma_new_cased_before",
+      "text": "ᲉΣ",
+      "coverage": [
+        "new Unicode16 cased predecessor enables FinalSigma"
+      ]
+    },
+    {
+      "id": "sigma_garay_cased_after",
+      "text": "AΣ𐵐",
+      "coverage": [
+        "new Unicode16 Garay cased successor prevents FinalSigma"
+      ]
+    },
+    {
+      "id": "sigma_existing_context",
+      "text": "ΟΣ ΟΣ́ ΟΣ’ ΟΣ’A Σ.",
+      "coverage": [
+        "existing Greek FinalSigma and Case_Ignorable behavior"
+      ]
+    },
+    {
+      "id": "turkish_default_case",
+      "text": "I İ i ı ISTANBUL İSTANBUL.",
+      "coverage": [
+        "default language-neutral lowercase",
+        "dotted I expansion"
+      ]
+    },
+    {
+      "id": "sharp_s_default_case",
+      "text": "Straße STRAẞE ẞ ß.",
+      "coverage": [
+        "capital sharp S lowercase",
+        "existing expansions"
+      ]
+    },
+    {
+      "id": "combining_no_normalization",
+      "text": "Café Café Å Å İ İ.",
+      "coverage": [
+        "precomposed/decomposed text remains distinct",
+        "no Unicode normalization"
+      ]
+    },
+    {
+      "id": "astral_new_script_offsets",
+      "text": "🐈 𐵐𐵰 Ᲊᲊ 𑛐𖵰𑯰 Café. 🌿 End.",
+      "coverage": [
+        "source code-point offsets",
+        "multiple astral scripts and emoji"
+      ]
+    },
+    {
+      "id": "new_script_line_offsets",
+      "text": "First 𐵐.\n\nᲉ\t𑛑𖵲!\r\nAΣ𑷰.",
+      "coverage": [
+        "line break offsets",
+        "new case and decimal features"
+      ]
+    },
+    {
+      "id": "unicode_whitespace_offsets",
+      "text": "A 𐵐 𑛑 B.",
+      "coverage": [
+        "existing non-ASCII whitespace",
+        "no source normalization"
+      ]
+    }
+  ]
+}

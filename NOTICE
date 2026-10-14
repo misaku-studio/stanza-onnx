@@ -1,0 +1,33 @@
+stanza-onnx
+Copyright 2026 Misaku Studio contributors
+
+This project adapts linguistic preprocessing and decoding from Stanza 1.11.0.
+Stanza copyright 2019 The Board of Trustees of The Leland Stanford Junior University.
+Stanza is licensed under the Apache License, Version 2.0.
+https://github.com/stanfordnlp/stanza/tree/v1.11.0
+
+The Rust processor implementations are ports and modifications
+of Stanza behavior; the Python export wrappers use Stanza's model implementations.
+This is an independent downstream project, not an official Stanford release.
+
+ONNX Runtime is a runtime dependency licensed under MIT.
+https://github.com/microsoft/onnxruntime
+
+The Rust ort binding is a dependency licensed under MIT OR Apache-2.0.
+https://github.com/pykeio/ort
+
+Generated Unicode 18.0.0 property and casing tables are derived directly from
+official Unicode Character Database files: UnicodeData.txt, SpecialCasing.txt,
+DerivedCoreProperties.txt and extracted/DerivedNumericType.txt. Source URLs and
+SHA256 checksums are retained in scripts/generate_unicode.py and the generated
+tables. These tables are shared by the native runtime and the explicitly
+adapted Stanza reference; they are not derived from a host Python database.
+https://www.unicode.org/Public/18.0.0/ucd/
+Unicode data copyright 1991-2026 Unicode, Inc.; license and permission notice
+in LICENSE-UNICODE (Unicode License V3).
+
+Pretrained models, embeddings, Unicode data and other separately obtained
+resources retain their own licenses. This project's code license does not
+assign a license to downloaded or exported model files. Bundle manifests
+record resource provenance; NOASSERTION means that an artifact's license
+has not been audited for redistribution.

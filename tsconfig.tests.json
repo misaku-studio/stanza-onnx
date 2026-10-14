@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": false,
+    "rootDir": ".",
+    "outDir": ".cache/adapter-tests"
+  },
+  "include": [
+    "adapters/node/**/*.ts",
+    "adapters-tests/**/*.ts"
+  ]
+}

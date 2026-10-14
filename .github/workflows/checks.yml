@@ -1,0 +1,74 @@
+name: Checks
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  PYTHONUTF8: '1'
+
+jobs:
+  rust:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - run: cargo fmt --all -- --check
+      - run: cargo test --workspace --locked
+      - run: cargo clippy --workspace --all-targets --locked -- -D warnings
+
+  unit:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci
+      - run: npm run format:js:check
+      - run: npm run build
+      - run: npm run typecheck
+      - run: npm run build:tests
+      - name: Check generic adapter on Node
+        run: node --test ./.cache/adapter-tests/adapters-tests/native.test.js
+      - run: python -m unittest discover -s scripts/tests -v
+      - run: python -m pip install black==24.10.0
+      - run: python -m black --check exporter/src exporter/tests scripts
+      - run: python -m pip install --no-deps -e exporter
+      - run: python -m unittest discover -s exporter/tests -v
+
+  unicode-host:
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.12', '3.14']
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install --no-deps -e exporter
+      - name: Check model-free Unicode and exporter behavior
+        run: python -m unittest discover -s exporter/tests -v
+      - name: Reproduce both Unicode18 table assets from pinned UCD
+        run: python scripts/generate_unicode.py --check

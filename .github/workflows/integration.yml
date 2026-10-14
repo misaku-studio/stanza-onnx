@@ -1,0 +1,176 @@
+name: Model integration
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      languages:
+        description: 'Space/comma-separated language codes; large selections need substantial runner disk space'
+        required: true
+        default: 'en fr nl zh-hans th sd my'
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  PYTHONUTF8: '1'
+
+jobs:
+  native-parity:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 180
+    env:
+      STANZA_ONNX_LANGUAGES: ${{ inputs.languages || 'en' }}
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: cargo build --workspace --release --locked
+      - name: Install CPU-only PyTorch
+        if: runner.os != 'macOS'
+        run: python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.10.0
+      - run: python -m pip install -e exporter
+      - name: Install verified official ONNX Runtime CPU binaries
+        run: |
+          python scripts/setup_ort.py \
+            --output "$RUNNER_TEMP/stanza-onnx/ort" \
+            > "$RUNNER_TEMP/stanza-onnx-ort.json"
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          runtime = json.loads((Path(os.environ["RUNNER_TEMP"]) / "stanza-onnx-ort.json").read_text(encoding="utf-8"))
+          binary = Path.cwd() / "target" / "release" / ("stanza-onnx.exe" if os.name == "nt" else "stanza-onnx")
+          with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as output:
+              output.write(f"STANZA_ONNX_ORT_LIBRARY={runtime['libraryPath']}\n")
+              output.write(f"STANZA_ONNX_BINARY={binary}\n")
+          with open(os.environ["GITHUB_PATH"], "a", encoding="utf-8") as output:
+              output.write(f"{runtime['directory']}\n")
+          PY
+      - name: Export and compare native output with the Stanza Unicode18 reference
+        run: |
+          python scripts/sweep.py \
+            --cache-dir "$RUNNER_TEMP/stanza-onnx/models" \
+            --artifacts-dir "$RUNNER_TEMP/stanza-onnx/artifacts" \
+            --bundles-dir "$RUNNER_TEMP/stanza-onnx/bundles" \
+            --output-dir "$RUNNER_TEMP/stanza-onnx/results" \
+            --native-binary "$STANZA_ONNX_BINARY" \
+            --ort-library "$STANZA_ONNX_ORT_LIBRARY" \
+            --download --languages en "$STANZA_ONNX_LANGUAGES"
+      - name: Check authored Unicode18 preprocessing and source offsets
+        run: |
+          python -m stanza_onnx reference --lang en \
+            --cache-dir "$RUNNER_TEMP/stanza-onnx/models" \
+            --input fixtures/unicode.json \
+            --output "$RUNNER_TEMP/stanza-onnx/results/unicode-references/en/reference.json"
+          python scripts/native_parity.py \
+            --binary "$STANZA_ONNX_BINARY" \
+            --ort-library "$STANZA_ONNX_ORT_LIBRARY" \
+            --bundles-dir "$RUNNER_TEMP/stanza-onnx/bundles" \
+            --references-dir "$RUNNER_TEMP/stanza-onnx/results/unicode-references" \
+            --output-dir "$RUNNER_TEMP/stanza-onnx/results/unicode-parity" --languages en
+      - name: Check scoped Unicode hooks and unchanged legacy Stanza output
+        env:
+          STANZA_ONNX_TEST_MODEL_CACHE: ${{ runner.temp }}/stanza-onnx/models
+        run: python -m unittest discover -s exporter/tests -v
+      - name: Check persistent native requests and UTF-16 offsets
+        run: |
+          python scripts/test_native_protocol.py \
+            --binary "$STANZA_ONNX_BINARY" \
+            --ort-library "$STANZA_ONNX_ORT_LIBRARY" \
+            --bundle "$RUNNER_TEMP/stanza-onnx/bundles/en"
+      - name: Stage English native bundle for adapter integration
+        run: |
+          python - <<'PY'
+          import os
+          import shutil
+          from pathlib import Path
+          temporary = Path(os.environ["RUNNER_TEMP"]) / "stanza-onnx"
+          destination = temporary / "adapter-integration"
+          shutil.copytree(temporary / "bundles" / "en", destination / "bundle")
+          executable = Path(os.environ["STANZA_ONNX_BINARY"])
+          (destination / "native").mkdir()
+          shutil.copy2(executable, destination / "native" / executable.name)
+          PY
+      - name: Upload English native adapter inputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-adapter-${{ matrix.os }}
+          path: ${{ runner.temp }}/stanza-onnx/adapter-integration/
+          retention-days: 1
+      - name: Upload native parity reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-parity-${{ matrix.os }}
+          path: ${{ runner.temp }}/stanza-onnx/results/
+          if-no-files-found: ignore
+          retention-days: 14
+
+  adapter-integration:
+    needs: native-parity
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci
+      - run: npm run build:tests
+      - uses: actions/download-artifact@v4
+        with:
+          name: native-adapter-${{ matrix.os }}
+          path: ${{ runner.temp }}/stanza-onnx/adapter-integration/
+      - name: Install verified ONNX Runtime and resolve native inputs
+        run: |
+          python scripts/setup_ort.py \
+            --output "$RUNNER_TEMP/stanza-onnx/ort" \
+            > "$RUNNER_TEMP/stanza-onnx-ort.json"
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          temporary = Path(os.environ["RUNNER_TEMP"])
+          runtime = json.loads((temporary / "stanza-onnx-ort.json").read_text(encoding="utf-8"))
+          inputs = temporary / "stanza-onnx" / "adapter-integration"
+          binary = inputs / "native" / ("stanza-onnx.exe" if os.name == "nt" else "stanza-onnx")
+          if os.name != "nt":
+              binary.chmod(0o755)
+          with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as output:
+              output.write(f"STANZA_ONNX_BINARY={binary}\n")
+              output.write(f"STANZA_ONNX_BUNDLE={inputs / 'bundle'}\n")
+              output.write(f"STANZA_ONNX_ORT_LIBRARY={runtime['libraryPath']}\n")
+          with open(os.environ["GITHUB_PATH"], "a", encoding="utf-8") as output:
+              output.write(f"{runtime['directory']}\n")
+          PY
+      - name: Check native process adapter on Node
+        run: |
+          node ./.cache/adapter-tests/adapters-tests/integration.js \
+            --binary "$STANZA_ONNX_BINARY" \
+            --ort-library "$STANZA_ONNX_ORT_LIBRARY" \
+            --bundle "$STANZA_ONNX_BUNDLE"

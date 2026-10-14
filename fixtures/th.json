@@ -1,0 +1,14 @@
+{
+  "language": "th",
+  "description": "Original verification texts authored for this project; not an accuracy evaluation corpus.",
+  "texts": [
+    {"id": "reading", "text": "มาลีอ่านหนังสืออยู่ข้างหน้าต่าง"},
+    {"id": "sentences", "text": "วันนี้ฝนตก เราจะไปสวนสาธารณะพรุ่งนี้"},
+    {"id": "numbers", "text": "รถไฟมาถึงเวลา 8:30 น. ตั๋วราคา 25 บาท"},
+    {"id": "unicode_offsets", "text": "แมว🐈มอง Café 🌿ต้นไม้กำลังโต"},
+    {"id": "line_breaks", "text": "ประโยคแรก\n\nประโยค\tที่สอง"},
+    {"id": "underscore", "text": "_"},
+    {"id": "empty", "text": ""},
+    {"id": "whitespace", "text": " \t\n "}
+  ]
+}

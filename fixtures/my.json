@@ -1,0 +1,14 @@
+{
+  "language": "my",
+  "description": "Original verification texts authored for this project; not an accuracy evaluation corpus.",
+  "texts": [
+    {"id": "reading", "text": "မီရာသည် ပြတင်းပေါက်နားတွင် စာအုပ်ဖတ်နေသည်။"},
+    {"id": "sentences", "text": "ဒီနေ့ မိုးရွာသည်။ မနက်ဖြန် ပန်းခြံသို့ သွားမည်။"},
+    {"id": "numbers", "text": "ရထားသည် 8:30 တွင် ရောက်မည်။ လက်မှတ်သည် 25 ကျပ် ဖြစ်သည်။"},
+    {"id": "unicode_offsets", "text": "ကြောင်🐈သည် Café ကို ကြည့်နေသည်။ 🌿အပင် ကြီးထွားနေသည်။"},
+    {"id": "line_breaks", "text": "ပထမ စာကြောင်း။\n\nဒုတိယ\tစာကြောင်း။"},
+    {"id": "underscore", "text": "_"},
+    {"id": "empty", "text": ""},
+    {"id": "whitespace", "text": " \t\n "}
+  ]
+}

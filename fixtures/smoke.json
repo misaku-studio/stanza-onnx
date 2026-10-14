@@ -1,0 +1,12 @@
+{
+  "description": "Synthetic cross-language execution checks only; these English strings do not evaluate native-language accuracy.",
+  "texts": [
+    {"id": "ascii_smoke", "text": "Fern reads a book. Does it work?"},
+    {"id": "unicode_offsets", "text": "A 🐈 B 🌿 Café."},
+    {"id": "line_breaks", "text": "One.\n\nTwo\tthree!"},
+    {"id": "numbers", "text": "8:30, 25, 2026."},
+    {"id": "underscore", "text": "_"},
+    {"id": "empty", "text": ""},
+    {"id": "whitespace", "text": " \t\n "}
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "language": "en",
+  "description": "Original verification texts authored for this project; not an accuracy evaluation corpus.",
+  "texts": [
+    {"id": "reading", "text": "Mira reads a short story by the window."},
+    {"id": "contractions", "text": "I can't find it, but we're looking."},
+    {"id": "sentences", "text": "The train arrived at 8:30. Where is my ticket?"},
+    {"id": "unicode_offsets", "text": "A cat 🐈 watches Café. 🌿 Fern grows."},
+    {"id": "line_breaks", "text": "First line.\n\nSecond\tline!"},
+    {"id": "underscore", "text": "_"},
+    {"id": "empty", "text": ""},
+    {"id": "whitespace", "text": " \t\n "}
+  ]
+}

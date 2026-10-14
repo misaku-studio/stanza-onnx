@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true,
+    "rootDir": "adapters/node",
+    "outDir": "dist"
+  },
+  "include": [
+    "adapters/node/**/*.ts"
+  ]
+}

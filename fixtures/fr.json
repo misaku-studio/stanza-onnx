@@ -1,0 +1,14 @@
+{
+  "language": "fr",
+  "description": "Original verification texts authored for this project; not an accuracy evaluation corpus.",
+  "texts": [
+    {"id": "reading", "text": "Mira lit une petite histoire près de la fenêtre."},
+    {"id": "multiword", "text": "Nous allons au jardin avec des amis du village."},
+    {"id": "apostrophes", "text": "Aujourd'hui, l'enfant n'a pas son livre."},
+    {"id": "unicode_offsets", "text": "Un chat 🐈 regarde le café. 🌿 La plante pousse."},
+    {"id": "line_breaks", "text": "Bonjour !\n\nOù est\tle train ?"},
+    {"id": "underscore", "text": "_"},
+    {"id": "empty", "text": ""},
+    {"id": "whitespace", "text": " \t\n "}
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "language": "zh-hans",
+  "description": "Original verification texts authored for this project; not an accuracy evaluation corpus.",
+  "texts": [
+    {"id": "reading", "text": "小林在窗边读一本短篇小说。"},
+    {"id": "sentences", "text": "今天下雨了。我们明天去公园，好吗？"},
+    {"id": "numbers", "text": "火车八点半到站，票价是25元。"},
+    {"id": "unicode_offsets", "text": "一只猫🐈看着Café。🌿植物长大了。"},
+    {"id": "line_breaks", "text": "第一句话。\n\n第二\t句话！"},
+    {"id": "underscore", "text": "_"},
+    {"id": "empty", "text": ""},
+    {"id": "whitespace", "text": " \t\n "}
+  ]
+}
