@@ -9,6 +9,10 @@ import {
   type NativePipelineOptions,
 } from '../adapters/node/native.js';
 
+// This includes real child startup, which can exceed 500 ms on busy CI runners.
+// Hanging-request tests still exercise the same bounded timeout and cleanup.
+const FIXTURE_TIMEOUT_MS = 5_000;
+
 interface FixtureOptions {
   ignoreShutdown?: boolean;
   closeStdinAfterInfo?: boolean;
@@ -196,7 +200,7 @@ function options(
     executableArgs: ['--eval', fakeRuntime(fixture), '--'],
     modelDir: 'model-free',
     ortLibrary: 'unused',
-    timeoutMs: 3_000,
+    timeoutMs: FIXTURE_TIMEOUT_MS,
     ...overrides,
   };
 }
@@ -293,7 +297,7 @@ describe('persistent native JavaScript adapter', () => {
   });
 
   test('request timeout kills the child and rejects queued work', async () => {
-    const pipeline = await createNativePipeline(options({ timeoutMs: 500 }));
+    const pipeline = await createNativePipeline(options());
     const pid = Number((await pipeline.analyze('pid'))[0].tokens[0].text);
     const checks = [
       assert.rejects(pipeline.analyze('hang'), /timed out/),
@@ -318,9 +322,7 @@ describe('persistent native JavaScript adapter', () => {
   }
 
   test('shutdown timeout kills a child that acknowledged but never exited', async () => {
-    const pipeline = await createNativePipeline(
-      options({ timeoutMs: 500 }, { ignoreShutdown: true }),
-    );
+    const pipeline = await createNativePipeline(options({}, { ignoreShutdown: true }));
     const pid = Number((await pipeline.analyze('pid'))[0].tokens[0].text);
     await assert.rejects(pipeline.close(), /shutdown timed out/);
     await assertStopped(pid);
@@ -336,10 +338,7 @@ describe('persistent native JavaScript adapter', () => {
       const directory = await mkdtemp(join(tmpdir(), 'stanza-adapter-'));
       const pidFile = join(directory, 'pid');
       try {
-        await assert.rejects(
-          createNativePipeline(options({ timeoutMs: 500 }, { startup, pidFile })),
-          message,
-        );
+        await assert.rejects(createNativePipeline(options({}, { startup, pidFile })), message);
         await assertStopped(Number(await readFile(pidFile, 'utf8')));
       } finally {
         await rm(directory, { recursive: true, force: true });
@@ -351,7 +350,7 @@ describe('persistent native JavaScript adapter', () => {
     const directory = await mkdtemp(join(tmpdir(), 'stanza-adapter-missing-'));
     try {
       await assert.rejects(
-        createNativePipeline(options({ executable: join(directory, 'missing'), timeoutMs: 500 })),
+        createNativePipeline(options({ executable: join(directory, 'missing') })),
         /Cannot start native runtime|ENOENT/,
       );
     } finally {
@@ -364,7 +363,7 @@ describe('persistent native JavaScript adapter', () => {
     const pidFile = join(directory, 'pid');
     try {
       const pipeline = await createNativePipeline(
-        options({ timeoutMs: 500 }, { closeStdinAfterInfo: true, pidFile }),
+        options({}, { closeStdinAfterInfo: true, pidFile }),
       );
       const pid = Number(await readFile(pidFile, 'utf8'));
       await new Promise((resolve) => setTimeout(resolve, 30));
