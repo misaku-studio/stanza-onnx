@@ -162,7 +162,7 @@ This policy is private to the native CPU implementation. CoreML and DirectML use
 
 ## Compatibility and versions
 
-Keep Rust, Python and JavaScript package versions aligned. Bundle compatibility accepts the 0.2.x runtime series with schema version 1 and `unicodeVersion: "18.0.0"`; runtime 0.1/Unicode15 bundles are rejected. Reassemble bundles from existing exported graphs into a fresh destination and regenerate references when adopting this contract. The model weights do not need re-exporting. Upgrade pinned Stanza/resources explicitly and regenerate references before claiming parity with a new upstream release. Catalog presence and export support are different: new architecture variants require converter/runtime work.
+Keep Rust, Python and JavaScript package versions aligned. Runtime 0.3 accepts Stanza bundles from runtime 0.2.x and 0.3.x; Bengali rule bundles require runtime 0.3.x with schema version 1 and `unicodeVersion: "18.0.0"`; runtime 0.1/Unicode15 bundles are rejected. Reassemble bundles from existing exported graphs into a fresh destination and regenerate references when adopting this contract. The model weights do not need re-exporting. Upgrade pinned Stanza/resources explicitly and regenerate references before claiming parity with a new upstream release. Catalog presence and export support are different: new architecture variants require converter/runtime work.
 
 Generate the shared native/reference tables directly from official Unicode 18.0.0 `ReadMe.txt`, `UnicodeData.txt`, `SpecialCasing.txt`, `DerivedCoreProperties.txt` and `extracted/DerivedNumericType.txt`. Their source URLs and SHA256 values are pinned in `scripts/generate_unicode.py` and retained in the generated data. The interpreter's built-in Unicode database does not generate these tables.
 
@@ -172,14 +172,25 @@ python scripts/generate_unicode.py --cache-dir /path/to/ucd18-cache --check
 
 The generator fetches only missing source files, verifies every checksum and verifies the final release marker. `--check` reproduces both checked-in table assets without changing them. Reference preprocessing uses the same data through a scoped Stanza 1.11.0 adaptation; neural models/trainers and weights are unchanged. References record their adaptation mode and Unicode/table provenance explicitly. Character predicates, default casing, FinalSigma context and Unicode-sensitive regexes must keep the shared semantics. Unicode code-point, UTF-16, UTF-8 byte and grapheme offsets remain distinct, and source text is not NFC/NFKC-normalized.
 
-CPU is the validated native execution path. The checked-in macOS/Windows workflows are validation infrastructure; remote Windows execution and native CoreML/DirectML performance remain to be established. Measure acceleration on target hardware before changing the default provider.
+CPU is the validated native execution path. English CPU model/adapter integration passed on macOS and Windows. Native CoreML/DirectML performance remains to be established. Measure acceleration on target hardware before changing the default provider.
 
 ## Future work
 
-- Packaged Windows validation and optional acceleration measurements.
-- UNIC-backed word/grapheme utilities and a tailored Bengali tokenizer.
+- Published package validation and optional acceleration measurements.
+- General Unicode word/grapheme utilities and broader Bengali abbreviation/URL rules.
 - Broader raw-input coverage and oversized individual sentence handling.
 - Additional Stanza processors and transformer profiles.
 - Audited model redistribution metadata and hosted language bundles.
 
 Keep fixtures, source provenance and reproducible commands with each behavior change. The initial API remains experimental.
+
+The downstream Bengali rule pack has no stock Stanza tokenizer reference.
+`scripts/sweep.py --all` selects only the 91 Stanza pipelines; check custom
+Bengali rules with `scripts/test_bengali.py` and the real Node adapter check
+described in [Bengali documentation](bengali.md). CI runs those checks without
+installing ML dependencies or ONNX Runtime on Linux, macOS and Windows.
+
+Bengali segmentation uses the Git-pinned Unicode 18 UNIC fork. Keep its exact
+revision and `Cargo.lock` aligned; do not substitute the older crates.io release.
+The tokenizer checks the dependency's Unicode data version. Native deployments
+ship the compiled code and require no local rust-unic checkout.

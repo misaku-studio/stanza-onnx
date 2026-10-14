@@ -4,6 +4,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
+from stanza_onnx import __version__
 from stanza_onnx.bundle import bundle, sanitize_metadata
 from stanza_onnx.cache import digest
 
@@ -66,7 +67,8 @@ class BundleTests(unittest.TestCase):
             manifest = bundle("en", root / "artifacts", root / "output")
             self.assertEqual(manifest["schemaVersion"], 1)
             self.assertEqual(manifest["unicodeVersion"], "18.0.0")
-            self.assertEqual(manifest["runtimeVersion"], "0.2.0")
+            self.assertEqual(manifest["runtimeVersion"], __version__)
+            self.assertEqual(manifest["tokenizerKind"], "stanza")
             self.assertEqual(manifest["offsetUnit"], "unicode-code-point")
             self.assertEqual(manifest["capabilities"]["lemma"], "trained")
             self.assertNotIn(

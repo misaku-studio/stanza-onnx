@@ -72,3 +72,33 @@ jobs:
         run: python -m unittest discover -s exporter/tests -v
       - name: Reproduce both Unicode18 table assets from pinned UCD
         run: python scripts/generate_unicode.py --check
+
+  bengali:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            binary: target/debug/stanza-onnx
+          - os: macos-latest
+            binary: target/debug/stanza-onnx
+          - os: windows-latest
+            binary: target/debug/stanza-onnx.exe
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: cargo build --locked -p stanza-onnx
+      - name: Export and verify Bengali without site packages or ONNX Runtime
+        run: python scripts/test_bengali.py --binary ${{ matrix.binary }} --bundle .cache/bengali-check
+      - run: npm ci
+      - run: npm run build:tests
+      - name: Verify real Node adapter without an ONNX Runtime library
+        run: node .cache/adapter-tests/adapters-tests/bengali.js --binary ${{ matrix.binary }} --bundle .cache/bengali-check

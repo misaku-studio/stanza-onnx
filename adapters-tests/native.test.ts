@@ -226,6 +226,7 @@ describe('persistent native JavaScript adapter', () => {
       assert.equal(pipeline.language, 'fake');
       assert.equal(pipeline.capabilities.lemma, 'none');
       assert.equal(pipeline.info.unicodeVersion, '18.0.0');
+      assert.equal(pipeline.info.tokenizerKind, 'stanza');
       assert.ok(Object.isFrozen(pipeline.capabilities));
       assert.equal(Number((await pipeline.analyze('pid'))[0].tokens[0].text), pid);
       assert.equal((await pipeline.analyze('second'))[0].tokens[0].text, 'second');
@@ -386,6 +387,8 @@ describe('persistent native JavaScript adapter', () => {
     await assert.rejects(createNativePipeline(options({ threads: 0 })), /threads/);
     await assert.rejects(createNativePipeline(options({ timeoutMs: 0 })), /timeoutMs/);
     await assert.rejects(createNativePipeline(options({ executable: '' })), /executable/);
+    await assert.rejects(createNativePipeline(options({ ortLibrary: '' })), /ortLibrary/);
+    await assert.rejects(createNativePipeline(options({ ortLibrary: 0 as never })), /ortLibrary/);
     await assert.rejects(
       createNativePipeline(options({ offsetUnit: 'invalid' as never })),
       /offsetUnit/,

@@ -2,7 +2,7 @@ use anyhow::{bail, ensure, Context, Result};
 use clap::{Parser, Subcommand};
 use serde::Deserialize;
 use serde_json::{json, Value};
-use stanza_onnx::{initialize_library, OffsetUnit, Pipeline, SessionOptions, RUNTIME_VERSION};
+use stanza_onnx::{OffsetUnit, Pipeline, SessionOptions, RUNTIME_VERSION};
 use std::{
     fs,
     io::{self, BufRead, Write},
@@ -68,6 +68,7 @@ fn info(pipeline: &Pipeline) -> Value {
     json!({
         "language": pipeline.manifest.language,
         "capabilities": pipeline.manifest.capabilities,
+        "tokenizerKind": pipeline.manifest.tokenizer_kind,
         "runtimeVersion": RUNTIME_VERSION,
         "stanzaVersion": pipeline.manifest.stanza_version,
         "resourceVersion": pipeline.manifest.resource_version,
@@ -200,12 +201,16 @@ fn execute() -> Result<()> {
     let library = arguments
         .ort_library
         .or_else(|| std::env::var_os("ORT_DYLIB_PATH").map(PathBuf::from));
-    initialize_library(library.as_deref())?;
     let options = SessionOptions {
         threads: arguments.threads,
         provider: arguments.provider,
     };
-    let mut pipeline = Pipeline::load(&arguments.model_dir, &options, !arguments.skip_integrity)?;
+    let mut pipeline = Pipeline::load_with_library(
+        &arguments.model_dir,
+        &options,
+        !arguments.skip_integrity,
+        library.as_deref(),
+    )?;
     match arguments.command {
         Command::Info => println!("{}", info(&pipeline)),
         Command::Serve => serve(&mut pipeline)?,

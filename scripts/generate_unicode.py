@@ -125,6 +125,16 @@ def _read_unicode_data(text, properties, lower, upper, title):
             properties["alpha"].update(points)
         if category == "Lt":
             properties["titlecase"].update(points)
+        # Tailored tokenizers must classify marks/punctuation using this pinned
+        # UCD, rather than the Unicode version built into a regex or host runtime.
+        if category.startswith("M"):
+            properties["mark"].update(points)
+        if category.startswith("P"):
+            properties["punctuation"].update(points)
+        if category.startswith("S"):
+            properties["symbol"].update(points)
+        if category == "Cf":
+            properties["format"].update(points)
         if category == "Zs" or bidi in {"WS", "B", "S"}:
             properties["whitespace"].update(points)
     if first is not None:
@@ -204,6 +214,10 @@ def build_tables(files):
             "alpha",
             "alnum",
             "whitespace",
+            "mark",
+            "punctuation",
+            "symbol",
+            "format",
         )
     }
     lower = {}

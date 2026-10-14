@@ -1,0 +1,28 @@
+{
+  "language": "bn",
+  "description": "Original texts and expected boundaries authored for the conservative Bengali rule tokenizer; not a Stanza parity or linguistic accuracy corpus.",
+  "texts": [
+    {"id": "reading", "text": "আমি বাংলা শিখছি। তুমি কেমন আছ?", "expectedTokens": [["আমি", "বাংলা", "শিখছি", "।"], ["তুমি", "কেমন", "আছ", "?"]]},
+    {"id": "quotes", "text": "সে বলল, “আমি আসছি।” তারপর গেল।", "expectedTokens": [["সে", "বলল", ",", "“", "আমি", "আসছি", "।", "”"], ["তারপর", "গেল", "।"]]},
+    {"id": "numbers", "text": "দাম ১২৩.৪৫ টাকা, 1,234.50 টাকা।", "expectedTokens": [["দাম", "১২৩.৪৫", "টাকা", ",", "1,234.50", "টাকা", "।"]]},
+    {"id": "hyphens_apostrophes", "text": "বাংলা-ইংরেজি ২০২৬-১০-১৫ can't।", "expectedTokens": [["বাংলা", "-", "ইংরেজি", "২০২৬", "-", "১০", "-", "১৫", "can", "'", "t", "।"]]},
+    {"id": "terminal_run", "text": "হ্যাঁ?! না॥ ঠিক... শেষ", "expectedTokens": [["হ্যাঁ", "?", "!"], ["না", "॥"], ["ঠিক", ".", ".", "."], ["শেষ"]]},
+    {"id": "internal_period", "text": "example.com এ e.g পড়ি।", "expectedTokens": [["example", ".", "com", "এ", "e", ".", "g", "পড়ি", "।"]]},
+    {"id": "known_abbreviation_limit", "text": "ড. রহমান আসেন।", "expectedTokens": [["ড", "."], ["রহমান", "আসেন", "।"]]},
+    {"id": "joiners", "text": "ক্‍ষ ক্‌ষ ক্ষ।", "expectedTokens": [["ক্‍ষ", "ক্‌ষ", "ক্ষ", "।"]]},
+    {"id": "decomposed", "text": "কো কো Café।", "expectedTokens": [["কো", "কো", "Café", "।"]]},
+    {"id": "emoji", "text": "বাংলা😊 👍🏽 👨‍👩‍👧‍👦 🇧🇩🇮🇹 🇦🇧🇨 1️⃣2️⃣ #️⃣ *️⃣।", "expectedTokens": [["বাংলা", "😊", "👍🏽", "👨‍👩‍👧‍👦", "🇧🇩", "🇮🇹", "🇦🇧", "🇨", "1️⃣", "2️⃣", "#️⃣", "*️⃣", "।"]]},
+    {"id": "punctuation_mark", "text": "আমি?́ তুমি।", "expectedTokens": [["আমি", "?́"], ["তুমি", "।"]]},
+    {"id": "keycap_mark", "text": "1️⃣́ বাংলা।", "expectedTokens": [["1️⃣́", "বাংলা", "।"]]},
+    {"id": "unicode_18_mark", "text": "ক\ud807\uddf0।", "expectedTokens": [["ক\ud807\uddf0", "।"]]},
+    {"id": "mixed_whitespace_cluster", "text": "আমি \u0301খ।", "expectedTokens": [["আমি", " \u0301", "খ", "।"]]},
+    {"id": "unicode_whitespace", "text": "  আমি বাংলা\tশিখছি।  ", "expectedTokens": [["আমি", "বাংলা", "শিখছি", "।"]]},
+    {"id": "single_line", "text": "আমি\r\nবাংলা\nশিখছি", "expectedTokens": [["আমি", "বাংলা", "শিখছি"]]},
+    {"id": "paragraphs", "text": "বাংলা\r\n \r\nEnglish\u2029শেষ", "expectedTokens": [["বাংলা"], ["English"], ["শেষ"]]},
+    {"id": "closing_brackets", "text": "(ঠিক!) [শেষ?] নতুন", "expectedTokens": [["(", "ঠিক", "!", ")"], ["[", "শেষ", "?", "]"], ["নতুন"]]},
+    {"id": "last_word", "text": "আমি বাংলা শিখছি", "expectedTokens": [["আমি", "বাংলা", "শিখছি"]]},
+    {"id": "underscore", "text": "_", "expectedTokens": [["_"]]},
+    {"id": "empty", "text": "", "expectedTokens": []},
+    {"id": "whitespace", "text": " \t\r\n  ", "expectedTokens": []}
+  ]
+}

@@ -1,6 +1,6 @@
 [package]
 name = "stanza-onnx"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 rust-version = "1.85"
 license = "Apache-2.0"
@@ -18,6 +18,7 @@ fancy-regex = "0.14"
 libloading = "0.8"
 ort = { version = "=2.0.0-rc.10", default-features = false, features = ["std", "load-dynamic", "coreml", "directml"] }
 clap = { version = "4.5", features = ["derive"] }
+unic-segment = { git = "https://github.com/eyeplum/rust-unic", rev = "d0a257bc7c21a48556d9bb204abdcb55ebe4c52b" }
 
 [dev-dependencies]
 tempfile = "3.20"

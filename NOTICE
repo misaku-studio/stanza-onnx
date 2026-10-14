@@ -16,6 +16,12 @@ https://github.com/microsoft/onnxruntime
 The Rust ort binding is a dependency licensed under MIT OR Apache-2.0.
 https://github.com/pykeio/ort
 
+UNIC segmentation is a dependency from the Unicode 18 fork of rust-unic.
+Copyright 2012-2015 The Rust Project Developers.
+Copyright 2017 The UNIC Project Developers.
+Licensed under MIT OR Apache-2.0.
+https://github.com/eyeplum/rust-unic/tree/d0a257bc7c21a48556d9bb204abdcb55ebe4c52b
+
 Generated Unicode 18.0.0 property and casing tables are derived directly from
 official Unicode Character Database files: UnicodeData.txt, SpecialCasing.txt,
 DerivedCoreProperties.txt and extracted/DerivedNumericType.txt. Source URLs and

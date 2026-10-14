@@ -10,7 +10,8 @@ export interface NativePipelineOptions {
   /** Arguments placed before the native runtime's flags, for executable wrappers. */
   executableArgs?: readonly string[];
   modelDir: string;
-  ortLibrary: string;
+  /** Optional for rule-only bundles; neural bundles need this or ORT_DYLIB_PATH. */
+  ortLibrary?: string;
   threads?: number;
   provider?: NativeProvider;
   offsetUnit?: NativeOffsetUnit;
@@ -25,6 +26,7 @@ export interface NativePipelineInfo {
   stanzaVersion: string;
   resourceVersion: string;
   unicodeVersion: string;
+  tokenizerKind: 'stanza' | 'bengali-rule';
 }
 
 export interface NativePipeline {
@@ -322,6 +324,11 @@ function parseInfo(value: unknown): NativePipelineInfo {
   if (!['trained', 'identity', 'none'].includes(capabilities.lemma as string)) {
     throw new NativeRuntimeError('Invalid native lemma capability');
   }
+  // Older native runtimes predate the explicit kind and use Stanza tokenizers.
+  const tokenizerKind = value.tokenizerKind === undefined ? 'stanza' : value.tokenizerKind;
+  if (tokenizerKind !== 'stanza' && tokenizerKind !== 'bengali-rule') {
+    throw new NativeRuntimeError('Invalid native tokenizer kind');
+  }
   return Object.freeze({
     language: value.language,
     capabilities: Object.freeze({
@@ -331,6 +338,7 @@ function parseInfo(value: unknown): NativePipelineInfo {
     stanzaVersion: value.stanzaVersion,
     resourceVersion: value.resourceVersion,
     unicodeVersion: value.unicodeVersion,
+    tokenizerKind,
   });
 }
 
@@ -417,10 +425,16 @@ export async function createNativePipeline(
   if (!options) {
     throw new TypeError('Native pipeline options are required');
   }
-  for (const name of ['executable', 'modelDir', 'ortLibrary'] as const) {
+  for (const name of ['executable', 'modelDir'] as const) {
     if (typeof options[name] !== 'string' || !options[name].trim()) {
       throw new TypeError(`${name} is required`);
     }
+  }
+  if (
+    options.ortLibrary !== undefined &&
+    (typeof options.ortLibrary !== 'string' || !options.ortLibrary.trim())
+  ) {
+    throw new TypeError('ortLibrary must be a nonempty string when supplied');
   }
   const {
     threads = 1,
@@ -450,8 +464,7 @@ export async function createNativePipeline(
       ...executableArgs,
       '--model-dir',
       options.modelDir,
-      '--ort-library',
-      options.ortLibrary,
+      ...(options.ortLibrary === undefined ? [] : ['--ort-library', options.ortLibrary]),
       '--threads',
       String(threads),
       '--provider',

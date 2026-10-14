@@ -127,7 +127,7 @@ def _parser():
     selection.add_argument(
         "--all",
         action="store_true",
-        help="All catalog entries that have a tokenizer pipeline; expensive",
+        help="All selected Stanza pipelines with an upstream reference; expensive",
     )
     parser.add_argument(
         "--download",
@@ -175,7 +175,10 @@ def _parser():
 
 def _select_languages(args, catalog):
     eligible = [
-        code for code, entry in catalog.items() if entry.get("pipeline_available")
+        code
+        for code, entry in catalog.items()
+        if entry.get("pipeline_available")
+        and entry.get("tokenizer_kind", "stanza") == "stanza"
     ]
     if args.all:
         return sorted(eligible)
@@ -335,6 +338,11 @@ def main() -> int:
                     error="Catalog has partial resources but no selected tokenizer pipeline",
                 )
                 return
+            if entry.get("tokenizer_kind", "stanza") != "stanza":
+                raise ValueError(
+                    "Downstream rule tokenizers have no stock Stanza reference; "
+                    "use scripts/test_bengali.py for authored Bengali checks"
+                )
             work = args.output_dir / language
             work.mkdir(parents=True, exist_ok=True)
             source = args.fixtures_dir / f"{language}.json"

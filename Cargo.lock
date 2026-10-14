@@ -525,7 +525,7 @@ checksum = "51d44cfb396c3caf6fbfd0ab422af02631b69ddd96d2eff0b0f0724f9024051b"
 
 [[package]]
 name = "stanza-onnx"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "anyhow",
  "clap",
@@ -537,6 +537,7 @@ dependencies = [
  "serde_json",
  "sha2",
  "tempfile",
+ "unic-segment",
 ]
 
 [[package]]
@@ -593,6 +594,62 @@ name = "typenum"
 version = "1.20.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b6f5e870be6c3b371b77fe0ee0bafb859fa4964b4404c27de1d380043c4dda20"
+
+[[package]]
+name = "unic-char-property"
+version = "0.9.0"
+source = "git+https://github.com/eyeplum/rust-unic?rev=d0a257bc7c21a48556d9bb204abdcb55ebe4c52b#d0a257bc7c21a48556d9bb204abdcb55ebe4c52b"
+dependencies = [
+ "unic-char-range",
+]
+
+[[package]]
+name = "unic-char-range"
+version = "0.9.0"
+source = "git+https://github.com/eyeplum/rust-unic?rev=d0a257bc7c21a48556d9bb204abdcb55ebe4c52b#d0a257bc7c21a48556d9bb204abdcb55ebe4c52b"
+
+[[package]]
+name = "unic-common"
+version = "0.9.0"
+source = "git+https://github.com/eyeplum/rust-unic?rev=d0a257bc7c21a48556d9bb204abdcb55ebe4c52b#d0a257bc7c21a48556d9bb204abdcb55ebe4c52b"
+
+[[package]]
+name = "unic-emoji-char"
+version = "0.9.0"
+source = "git+https://github.com/eyeplum/rust-unic?rev=d0a257bc7c21a48556d9bb204abdcb55ebe4c52b#d0a257bc7c21a48556d9bb204abdcb55ebe4c52b"
+dependencies = [
+ "unic-char-property",
+ "unic-char-range",
+ "unic-ucd-version",
+]
+
+[[package]]
+name = "unic-segment"
+version = "0.9.0"
+source = "git+https://github.com/eyeplum/rust-unic?rev=d0a257bc7c21a48556d9bb204abdcb55ebe4c52b#d0a257bc7c21a48556d9bb204abdcb55ebe4c52b"
+dependencies = [
+ "unic-emoji-char",
+ "unic-ucd-segment",
+]
+
+[[package]]
+name = "unic-ucd-segment"
+version = "0.9.0"
+source = "git+https://github.com/eyeplum/rust-unic?rev=d0a257bc7c21a48556d9bb204abdcb55ebe4c52b#d0a257bc7c21a48556d9bb204abdcb55ebe4c52b"
+dependencies = [
+ "unic-char-property",
+ "unic-char-range",
+ "unic-emoji-char",
+ "unic-ucd-version",
+]
+
+[[package]]
+name = "unic-ucd-version"
+version = "0.9.0"
+source = "git+https://github.com/eyeplum/rust-unic?rev=d0a257bc7c21a48556d9bb204abdcb55ebe4c52b#d0a257bc7c21a48556d9bb204abdcb55ebe4c52b"
+dependencies = [
+ "unic-common",
+]
 
 [[package]]
 name = "unicode-ident"

@@ -10,7 +10,8 @@ import tempfile
 from . import __version__
 from .bundle import bundle
 from .cache import download, verify_cache, write_resources
-from .catalog import capabilities, catalog, language_profile
+from .catalog import capabilities, catalog, language_profile, tokenizer_kind
+from .bengali import write_artifacts as write_bengali_artifacts
 
 
 def parser():
@@ -30,9 +31,8 @@ def parser():
         )
         command.add_argument(
             "--cache-dir",
-            required=True,
             type=Path,
-            help="Stanza model directory: resources.json and language subdirectories",
+            help="Stanza model directory (required for neural pipelines; unused for Bengali rules)",
         )
         if name in {"export", "bundle", "reference"}:
             command.add_argument("--output", required=True, type=Path)
@@ -47,6 +47,13 @@ def export(language, cache_dir, output):
     profile = language_profile(language)
     if output.exists() and (not output.is_dir() or any(output.iterdir())):
         raise ValueError(f"Output directory must be absent or empty: {output}")
+    if tokenizer_kind(language) == "bengali-rule":
+        with tempfile.TemporaryDirectory(prefix="stanza-onnx-bengali-") as temporary:
+            artifacts = Path(temporary)
+            write_bengali_artifacts(artifacts)
+            return bundle(language, artifacts, output)
+    if cache_dir is None:
+        raise ValueError("--cache-dir is required for Stanza neural pipelines")
     verify_cache(language, cache_dir)
     # Separate subprocesses keep the converter's Torch thread initialization and
     # peak memory isolated. There are no absolute checkout/cache assumptions.
@@ -83,6 +90,7 @@ def _list_entries():
                 "profile": profile["profile"],
                 "pipelineAvailable": available,
                 "processors": profile["processors"],
+                "tokenizerKind": tokenizer_kind(language) if available else None,
                 "capabilities": capabilities(language) if available else None,
             }
         )
@@ -97,6 +105,8 @@ def _print_listing(as_json):
     for entry in entries:
         if entry["pipelineAvailable"]:
             state = ", ".join(entry["processors"])
+            if entry["tokenizerKind"] == "bengali-rule":
+                state += " (downstream Bengali rules; no Stanza model)"
         else:
             state = "partial resources; no tokenizer pipeline"
         print(f"{entry['language']:9} {entry['languageName']:24} {state}")
@@ -104,6 +114,15 @@ def _print_listing(as_json):
 
 def _run_command(args):
     language_profile(args.lang)
+    if tokenizer_kind(args.lang) == "bengali-rule":
+        if args.command == "download":
+            return {"language": args.lang, "files": 0, "tokenizerKind": "bengali-rule"}
+        if args.command == "reference":
+            from .reference import reference
+
+            return reference(args.lang, args.cache_dir, args.input, args.output)
+    elif args.cache_dir is None:
+        raise ValueError("--cache-dir is required for Stanza neural pipelines")
     if args.command == "download":
         return download(args.lang, args.cache_dir)
     if args.command == "export":

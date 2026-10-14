@@ -7,7 +7,8 @@ import tempfile
 
 from . import __version__, RESOURCE_VERSION, STANZA_VERSION, UNICODE_VERSION
 from .cache import digest
-from .catalog import capabilities, language_profile, selected_sources
+from .catalog import capabilities, language_profile, selected_sources, tokenizer_kind
+from .bengali import validate_metadata as validate_bengali_metadata
 
 RUNTIME_FILES = {
     "tokenizer.onnx",
@@ -51,7 +52,7 @@ DECODER_CONFIG = {
 
 
 def sanitize_metadata(filename, data):
-    if filename == "tokenizer.json":
+    if filename == "tokenizer.json" and data.get("kind") != "bengali-rule":
         data["config"] = {
             key: value
             for key, value in data["config"].items()
@@ -95,8 +96,11 @@ def _required_decoder_files(processor, metadata, selected, language):
 def required_files(language, artifacts):
     profile = language_profile(language)
     processors = profile["processors"]
-    required = {"tokenizer.json", "tokenizer.onnx", "mwt.json", "lemma.json"}
     tokenizer = json.loads((artifacts / "tokenizer.json").read_text(encoding="utf-8"))
+    if tokenizer_kind(language) == "bengali-rule":
+        validate_bengali_metadata(tokenizer)
+        return {"tokenizer.json"}
+    required = {"tokenizer.json", "tokenizer.onnx", "mwt.json", "lemma.json"}
     if (
         tokenizer.get("language") != language
         or tokenizer.get("package") != processors["tokenize"]
@@ -179,6 +183,7 @@ def bundle(language, artifacts, output):
             "runtimeVersion": __version__,
             "unicodeVersion": UNICODE_VERSION,
             "offsetUnit": "unicode-code-point",
+            "tokenizerKind": tokenizer_kind(language),
             "processors": profile["processors"],
             "capabilities": capabilities(language),
             "files": inventory,

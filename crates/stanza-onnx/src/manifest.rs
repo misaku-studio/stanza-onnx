@@ -33,6 +33,14 @@ pub struct Source {
     pub md5: String,
     pub license: String,
 }
+/// Stanza bundles without this field retain their original neural tokenizer.
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum TokenizerKind {
+    #[default]
+    Stanza,
+    BengaliRule,
+}
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BundleManifest {
@@ -45,6 +53,8 @@ pub struct BundleManifest {
     pub runtime_version: String,
     pub unicode_version: String,
     pub offset_unit: String,
+    #[serde(default)]
+    pub tokenizer_kind: TokenizerKind,
     pub processors: HashMap<String, String>,
     pub capabilities: Capabilities,
     pub files: Vec<Asset>,
@@ -101,7 +111,8 @@ impl BundleManifest {
         let patch = self
             .runtime_version
             .strip_prefix("0.2.")
-            .context("Incompatible bundle runtimeVersion; expected 0.2.x")?;
+            .or_else(|| self.runtime_version.strip_prefix("0.3."))
+            .context("Incompatible bundle runtimeVersion; expected 0.2.x or 0.3.x")?;
         ensure!(
             !patch.is_empty() && patch.bytes().all(|c| c.is_ascii_digit()),
             "Incompatible bundle runtimeVersion"
@@ -155,7 +166,23 @@ impl BundleManifest {
             ensure!(hexadecimal(&file.sha256, 64), "Invalid asset SHA256");
             paths.insert(file.path.as_str());
         }
-        let mut required = vec!["tokenizer.json", "tokenizer.onnx"];
+        let mut required = vec!["tokenizer.json"];
+        match self.tokenizer_kind {
+            TokenizerKind::Stanza => required.push("tokenizer.onnx"),
+            TokenizerKind::BengaliRule => {
+                ensure!(
+                    self.language == "bn"
+                        && self.processors.len() == 1
+                        && self.processors["tokenize"] == "bengali-rule-v1"
+                        && self.runtime_version.starts_with("0.3."),
+                    "Bengali rules require a Bengali tokenizer-only runtime 0.3 bundle"
+                );
+                ensure!(
+                    self.files.len() == 1 && self.sources.is_empty(),
+                    "Bengali rules have one metadata asset and no upstream checkpoints"
+                );
+            }
+        }
         if self.processors.contains_key("pos") {
             required.extend(["pos-vocab.json", "pos-tagger.onnx"]);
         }
@@ -171,10 +198,12 @@ impl BundleManifest {
                 "Bundle is missing required asset {name}"
             );
         }
-        ensure!(
-            !self.sources.is_empty(),
-            "Bundle records no resource provenance"
-        );
+        if self.tokenizer_kind == TokenizerKind::Stanza {
+            ensure!(
+                !self.sources.is_empty(),
+                "Bundle records no resource provenance"
+            );
+        }
         for source in &self.sources {
             ensure!(
                 !source.processor.trim().is_empty()
@@ -273,15 +302,57 @@ fn validate_processor_assets(dir: &Path, manifest: &BundleManifest) -> Result<()
         Ok(())
     };
     let token = read_meta(dir, "tokenizer.json")?;
-    ensure!(
-        token["config"].is_object()
-            && token["vocab"]["_unit2id"].is_object()
-            && token["mask_regex"].is_string()
-            && token["config"]["lang"].is_string()
-            && token["config"]["feat_funcs"].is_array(),
-        "Invalid tokenizer metadata"
-    );
-    positive(&token["config"]["feat_dim"], "tokenizer feature width")?;
+    match manifest.tokenizer_kind {
+        TokenizerKind::Stanza => {
+            ensure!(
+                token.get("kind").is_none() || token["kind"] == "stanza",
+                "Tokenizer kind does not match the manifest"
+            );
+            ensure!(
+                token["config"].is_object()
+                    && token["vocab"]["_unit2id"].is_object()
+                    && token["mask_regex"].is_string()
+                    && token["config"]["lang"].is_string()
+                    && token["config"]["feat_funcs"].is_array(),
+                "Invalid tokenizer metadata"
+            );
+            positive(&token["config"]["feat_dim"], "tokenizer feature width")?;
+        }
+        TokenizerKind::BengaliRule => {
+            let fields = token
+                .as_object()
+                .context("Invalid Bengali rules metadata")?;
+            ensure!(
+                token["kind"] == "bengali-rule"
+                    && token["language"] == "bn"
+                    && token["package"] == "bengali-rule-v1"
+                    && token["rules_version"].as_u64() == Some(1)
+                    && token["unicode_version"] == crate::UNICODE_VERSION,
+                "Unsupported or mismatched Bengali tokenizer rules"
+            );
+            ensure!(
+                fields.keys().all(|key| matches!(
+                    key.as_str(),
+                    "kind"
+                        | "language"
+                        | "package"
+                        | "rules_version"
+                        | "unicode_version"
+                        | "source"
+                        | "license"
+                )),
+                "Unknown Bengali rules metadata field"
+            );
+            for name in ["source", "license"] {
+                if let Some(value) = fields.get(name) {
+                    ensure!(
+                        value.as_str().is_some_and(|text| !text.trim().is_empty()),
+                        "Invalid Bengali rules metadata {name}"
+                    );
+                }
+            }
+        }
+    }
     if manifest.processors.contains_key("pos") {
         let pos = read_meta(dir, "pos-vocab.json")?;
         ensure!(
@@ -394,6 +465,89 @@ fn validate_processor_assets(dir: &Path, manifest: &BundleManifest) -> Result<()
 #[cfg(test)]
 mod tests {
     use super::*;
+    fn rule_bundle(directory: &Path, rules_version: Value) -> BundleManifest {
+        let metadata = serde_json::json!({
+            "kind": "bengali-rule", "language": "bn", "package": "bengali-rule-v1",
+            "rules_version": rules_version, "unicode_version": crate::UNICODE_VERSION,
+        });
+        let bytes = serde_json::to_vec(&metadata).unwrap();
+        fs::write(directory.join("tokenizer.json"), &bytes).unwrap();
+        serde_json::from_value(serde_json::json!({
+            "schemaVersion": 1, "language": "bn", "languageName": "Bengali",
+            "profile": "bengali-rule-v1", "stanzaVersion": "1.11.0",
+            "resourceVersion": "1.11.0", "runtimeVersion": crate::RUNTIME_VERSION,
+            "unicodeVersion": crate::UNICODE_VERSION, "offsetUnit": "unicode-code-point",
+            "tokenizerKind": "bengali-rule", "processors": {"tokenize": "bengali-rule-v1"},
+            "capabilities": {"tokenize": true, "sentenceSplit": true,
+                "multiwordExpansion": false, "pos": false, "morphology": false, "lemma": "none"},
+            "files": [{"path": "tokenizer.json", "size": bytes.len(),
+                "sha256": format!("{:x}", Sha256::digest(&bytes))}],
+            "sources": [],
+        }))
+        .unwrap()
+    }
+
+    #[test]
+    fn rule_bundles_load_without_a_native_library_or_model_annotations() {
+        let directory = tempfile::tempdir().unwrap();
+        let manifest = rule_bundle(directory.path(), serde_json::json!(1));
+        fs::write(
+            directory.path().join("bundle.json"),
+            serde_json::to_vec(&manifest).unwrap(),
+        )
+        .unwrap();
+        let mut pipeline = crate::Pipeline::load_with_library(
+            directory.path(),
+            &crate::SessionOptions::default(),
+            true,
+            Some(Path::new("missing-onnx-runtime")),
+        )
+        .unwrap();
+        let output = pipeline
+            .analyze("আমি বাংলা শিখছি।", crate::OffsetUnit::CodePoint)
+            .unwrap();
+        assert_eq!(output.len(), 1);
+        assert_eq!(output[0].tokens[0].text, "আমি");
+        assert_eq!(output[0].tokens[0].words[0].upos, None);
+        assert_eq!(output[0].tokens[0].words[0].lemma, None);
+    }
+
+    #[test]
+    fn rule_bundles_reject_foreign_languages_processors_and_rules() {
+        let directory = tempfile::tempdir().unwrap();
+        let original = rule_bundle(directory.path(), serde_json::json!(1));
+        original.validate().unwrap();
+        let mut foreign = original.clone();
+        foreign.language = "en".into();
+        assert!(foreign.validate().is_err());
+        let mut old = original.clone();
+        old.runtime_version = "0.2.0".into();
+        assert!(old.validate().is_err());
+        let mut annotated = original.clone();
+        annotated.processors.insert("pos".into(), "invented".into());
+        annotated.capabilities.pos = true;
+        annotated.capabilities.morphology = true;
+        assert!(annotated.validate().is_err());
+        for version in [serde_json::json!(2), serde_json::json!(true)] {
+            let invalid = rule_bundle(directory.path(), version);
+            assert!(validate_processor_assets(directory.path(), &invalid).is_err());
+        }
+    }
+
+    #[test]
+    fn legacy_stanza_manifests_default_to_neural_tokenizers() {
+        let directory = tempfile::tempdir().unwrap();
+        let manifest = rule_bundle(directory.path(), serde_json::json!(1));
+        let mut value = serde_json::to_value(manifest).unwrap();
+        value.as_object_mut().unwrap().remove("tokenizerKind");
+        let legacy: BundleManifest = serde_json::from_value(value).unwrap();
+        assert_eq!(legacy.tokenizer_kind, TokenizerKind::Stanza);
+        assert!(legacy
+            .validate()
+            .unwrap_err()
+            .to_string()
+            .contains("tokenizer.onnx"));
+    }
     #[test]
     fn bundles_must_match_runtime_and_preprocessing_versions() {
         let mut manifest = BundleManifest {
@@ -406,6 +560,7 @@ mod tests {
             runtime_version: crate::RUNTIME_VERSION.into(),
             unicode_version: crate::UNICODE_VERSION.into(),
             offset_unit: "unicode-code-point".into(),
+            tokenizer_kind: TokenizerKind::Stanza,
             processors: HashMap::from([("tokenize".into(), "combined".into())]),
             capabilities: Capabilities {
                 tokenize: true,

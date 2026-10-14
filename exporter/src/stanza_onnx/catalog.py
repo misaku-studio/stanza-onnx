@@ -38,9 +38,23 @@ def language_profile(language, *, require_pipeline=True):
     return profile
 
 
+def tokenizer_kind(language):
+    """Distinguish the explicit downstream rule pack from Stanza checkpoints."""
+    profile = language_profile(language)
+    kind = profile.get("tokenizer_kind", "stanza")
+    if kind == "bengali-rule":
+        if language != "bn" or profile["processors"] != {"tokenize": "bengali-rule-v1"}:
+            raise ValueError("Invalid downstream Bengali tokenizer selection")
+    elif kind != "stanza":
+        raise ValueError(f"Unknown tokenizer kind: {kind}")
+    return kind
+
+
 def selected_sources(language):
     """Return task checkpoints plus recursively required auxiliary checkpoints."""
     profile = language_profile(language)
+    if tokenizer_kind(language) == "bengali-rule":
+        return []
     result = {}
 
     def add(processor, package):

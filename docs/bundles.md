@@ -12,7 +12,8 @@ A bundle is a directory containing `bundle.json` and flat runtime assets. The Py
   "profile": "default_fast",
   "stanzaVersion": "1.11.0",
   "resourceVersion": "1.11.0",
-  "runtimeVersion": "0.2.0",
+  "runtimeVersion": "0.3.0",
+  "tokenizerKind": "stanza",
   "unicodeVersion": "18.0.0",
   "offsetUnit": "unicode-code-point",
   "processors": {
@@ -46,11 +47,21 @@ A bundle is a directory containing `bundle.json` and flat runtime assets. The Py
 
 Sizes, hashes and URLs in this example are placeholders. Real bundles enumerate every ONNX graph, processor metadata JSON and external embedding table they use. Export diagnostics are omitted. Sources include checkpoint dependencies such as pretrained vectors and character language models. ONNX Runtime shared libraries are deployed separately and do not belong to the language bundle.
 
-Only selected source packages are supported; catalog presence alone does not imply a usable pipeline. Missing processors are omitted. `capabilities.lemma` is `trained`, `identity` or `none`. Identity lemmas copy the written word without morphological normalization. Converter metadata for an omitted processor uses `kind: "none"`; `kind: "identity"` is reserved for an explicitly selected identity lemma processor. The runtime requires a tokenizer pipeline; no stock Bengali bundle or fallback tokenizer is supplied.
+Only selected source packages are supported; catalog presence alone does not imply a usable pipeline. Missing processors are omitted. `capabilities.lemma` is `trained`, `identity` or `none`. Identity lemmas copy the written word without morphological normalization. Converter metadata for an omitted processor uses `kind: "none"`; `kind: "identity"` is reserved for an explicitly selected identity lemma processor. The runtime requires a tokenizer pipeline. Bengali uses a downstream rule implementation rather than an upstream checkpoint; see [Bengali](bengali.md).
+
+## Bengali metadata-only bundles
+
+A Bengali bundle declares `tokenizerKind: "bengali-rule"`,
+`processors: {"tokenize": "bengali-rule-v1"}`, and tokenizer/sentence-only
+capabilities. It lists only `tokenizer.json` in `files` and has `sources: []`.
+The metadata specifies `kind`, `language`, `package`, `rules_version: 1` and
+`unicode_version: "18.0.0"`; the actual rules ship in the native runtime.
+Loading rejects mismatched language, processor, rules or Unicode versions.
+No ONNX graph or Stanza character-language-model checkpoint is used.
 
 ## Loading and integrity
 
-Loading checks schema/runtime compatibility, capability consistency, required assets, decoder metadata and portable flat asset paths. Default loading also verifies sizes and SHA256 content hashes. The current compatibility series is runtime 0.2.x with schema version 1. The native runtime requires `unicodeVersion: "18.0.0"` to match its generated preprocessing tables and rejects runtime 0.1/Unicode15 bundles.
+Loading checks schema/runtime compatibility, capability consistency, required assets, decoder metadata and portable flat asset paths. Default loading also verifies sizes and SHA256 content hashes. Runtime 0.3 accepts Stanza bundles from runtime 0.2.x and 0.3.x with schema version 1. Missing `tokenizerKind` defaults to `stanza` for existing bundles. Bengali rule bundles require runtime 0.3.x. The native runtime requires `unicodeVersion: "18.0.0"` to match its generated preprocessing tables and rejects runtime 0.1/Unicode15 bundles.
 
 Regenerate bundle metadata in a fresh destination using existing converted graphs:
 
@@ -71,7 +82,7 @@ Rust and the Python reference use identical tables generated directly from check
 
 Verification runs Stanza 1.11.0 with an explicit, scoped adaptation of Unicode-dependent preprocessing. It retains the selected model processors and weights, supplies Unicode18 string operations and regex classes at audited boundaries, and restores the adapted module attributes afterward. References identify `referenceMode: "stanza-unicode18-preprocessing"`, `unicodeVersion: "18.0.0"`, the UCD/table hashes and the host interpreter's Unicode version. Native parity requires the Unicode version to match; it does not treat an unadapted host-Unicode Stanza output as the Unicode18 reference. Passing fixture parity does not establish equivalence for every Unicode input.
 
-Original input is not NFC/NFKC-normalized before inference. Dictionary/search normalization can be implemented separately while preserving source alignment. Word/grapheme utilities and fallback tokenizers remain separate capabilities.
+Original input is not NFC/NFKC-normalized before inference. Dictionary/search normalization can be implemented separately while preserving source alignment. The Bengali pack applies its documented preservation rules to this original text. General word/grapheme segmentation utilities remain future work.
 
 Tokenizer metadata retains the vocabulary's actual `lang_replaces_spaces` flag. When absent, it defaults to `false`, matching Stanza 1.11 checkpoint loading. The runtime does not infer this policy from a Chinese, Japanese or Korean language code; internal token spaces and source offsets follow the loaded model's behavior.
 
@@ -81,7 +92,7 @@ Deploy a native executable or embedded Rust library, one or more language bundle
 
 `scripts/setup_ort.py` obtains checksum-verified ONNX Runtime 1.23.2 CPU distributions and retains their license/notice files. It is a preparation helper, not an inference dependency. Native library selection uses `--ort-library`, `ORT_DYLIB_PATH` or supported filenames beside the executable. CoreML/DirectML selections require provider-enabled libraries and their dependencies; the CPU setup helper does not promise accelerated execution.
 
-The Rust library initializes ONNX Runtime once per process. Explicit `initialize_library(Some(path))` chooses the library before pipelines load; otherwise loading discovers the environment or adjacent installation. Dropping individual pipelines releases their sessions and does not unload the process-global runtime.
+Neural bundles initialize ONNX Runtime once per process. Rule-only Bengali bundles load without it. Explicit `initialize_library(Some(path))` chooses the library before pipelines load; otherwise loading discovers the environment or adjacent installation. Dropping individual pipelines releases their sessions and does not unload the process-global runtime.
 
 ## Distribution and licenses
 

@@ -46,10 +46,15 @@
   },
   "bn": {
     "language_name": "Bengali",
-    "profile": "default",
-    "pipeline_available": false,
-    "processors": {},
-    "selection_changes": []
+    "profile": "bengali-rule-v1",
+    "pipeline_available": true,
+    "tokenizer_kind": "bengali-rule",
+    "processors": {
+      "tokenize": "bengali-rule-v1"
+    },
+    "selection_changes": [
+      "Custom downstream rule tokenizer and sentence splitter; no stock Stanza Bengali tokenizer, POS or lemma model is selected."
+    ]
   },
   "da": {
     "language_name": "Danish",

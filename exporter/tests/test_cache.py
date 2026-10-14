@@ -45,7 +45,7 @@ class CacheTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "run.*download"):
                 verify_cache("en", root)
             with self.assertRaisesRegex(ValueError, "no selected tokenizer"):
-                verify_cache("bn", root)
+                verify_cache("ml", root)
 
 
 if __name__ == "__main__":

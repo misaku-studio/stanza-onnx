@@ -19,6 +19,10 @@ struct Tables {
     alpha: Vec<[u32; 2]>,
     alnum: Vec<[u32; 2]>,
     whitespace: Vec<[u32; 2]>,
+    mark: Vec<[u32; 2]>,
+    punctuation: Vec<[u32; 2]>,
+    symbol: Vec<[u32; 2]>,
+    format: Vec<[u32; 2]>,
     cased: Vec<[u32; 2]>,
     case_ignorable: Vec<[u32; 2]>,
     lower: HashMap<u32, String>,
@@ -71,6 +75,19 @@ pub fn python_alnum(c: char) -> bool {
 }
 pub fn python_cased(c: char) -> bool {
     in_ranges(c, &tables().cased)
+}
+/// Unicode General_Category mark (Mn, Mc or Me), including Bengali vowel signs.
+pub fn unicode_mark(c: char) -> bool {
+    in_ranges(c, &tables().mark)
+}
+pub fn unicode_punctuation(c: char) -> bool {
+    in_ranges(c, &tables().punctuation)
+}
+pub fn unicode_symbol(c: char) -> bool {
+    in_ranges(c, &tables().symbol)
+}
+pub fn unicode_format(c: char) -> bool {
+    in_ranges(c, &tables().format)
 }
 pub fn python_isupper(text: &str) -> bool {
     let mut has_uppercase = false;
@@ -149,6 +166,18 @@ pub fn python_upper(text: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn tailored_tokenizer_categories_use_unicode_18() {
+        assert!(unicode_mark('া'));
+        assert!(unicode_mark('\u{11df0}'));
+        assert!(unicode_punctuation('।'));
+        assert!(unicode_punctuation('”'));
+        assert!(unicode_symbol('😊'));
+        assert!(unicode_format('\u{200d}'));
+        assert!(!unicode_mark('ক'));
+        assert!(!unicode_punctuation('ক'));
+    }
 
     #[test]
     fn default_casing_preserves_expanding_and_locale_independent_forms() {

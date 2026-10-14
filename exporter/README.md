@@ -31,13 +31,13 @@ Use each
 command's `--help` for required arguments. Help and catalog listing do not
 import training dependencies.
 
-Runtime 0.2 bundles require `unicodeVersion: "18.0.0"`; runtime 0.1/Unicode15
+Runtime 0.2/0.3 bundles require `unicodeVersion: "18.0.0"`; runtime 0.1/Unicode15
 bundles are rejected. Repackage existing converted graphs with `bundle` into
 a fresh destination and regenerate references. Retraining and weight
 re-export are unnecessary for this Unicode contract change.
 
-The catalog contains 91 selected tokenizer pipelines and four partial-resource
-entries. Catalog presence does not imply a runnable pipeline. A selected
+The catalog contains 91 selected Stanza tokenizer pipelines, one downstream
+Bengali rule pack and three partial-resource entries. Catalog presence does not imply a runnable pipeline. A selected
 profile covers only tokenization, multiword expansion, POS/morphology and
 lemmatization where available. The project and bundle contract are experimental.
 
@@ -46,3 +46,11 @@ models and embeddings are downloaded separately and retain their own terms.
 `NOASSERTION` in a bundle means that the resource's license has not been
 reviewed for redistribution. This package includes catalog metadata, but no
 pretrained model binaries or third-party corpus fixtures.
+
+The Bengali pack exports with no ML dependencies or model cache. From the
+checkout, set `PYTHONPATH` to `exporter/src`, then run
+`python -S -m stanza_onnx export --lang bn --output .cache/bundles/bn`.
+It provides tokenization, sentence splitting and source offsets only.
+`sources` is empty because no upstream checkpoint is used. Its rule implementation
+is Apache-2.0 project code. `reference --lang bn` rejects an upstream parity
+comparison explicitly. See [Bengali documentation](../docs/bengali.md).

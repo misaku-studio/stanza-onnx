@@ -12,6 +12,7 @@ from stanza_onnx.catalog import (
     language_profile,
     resources,
     selected_sources,
+    tokenizer_kind,
 )
 
 
@@ -21,10 +22,10 @@ class CatalogTests(unittest.TestCase):
         eligible = [
             lang for lang, profile in catalog().items() if profile["pipeline_available"]
         ]
-        self.assertEqual(len(eligible), 91)
+        self.assertEqual(len(eligible), 92)
         self.assertEqual(
             {lang for lang in catalog() if lang not in eligible},
-            {"bn", "ml", "si", "or"},
+            {"ml", "si", "or"},
         )
         self.assertEqual(
             sum(capabilities(lang)["lemma"] == "identity" for lang in eligible), 5
@@ -37,6 +38,10 @@ class CatalogTests(unittest.TestCase):
             if not profile["pipeline_available"]:
                 continue
             sources = selected_sources(language)
+            if tokenizer_kind(language) == "bengali-rule":
+                self.assertEqual(language, "bn")
+                self.assertEqual(sources, [])
+                continue
             keys = {(source["processor"], source["package"]) for source in sources}
             self.assertEqual(len(keys), len(sources))
             for processor, package in profile["processors"].items():
@@ -53,10 +58,10 @@ class CatalogTests(unittest.TestCase):
 
     def test_catalog_entry_does_not_imply_pipeline(self):
         self.assertEqual(
-            language_profile("bn", require_pipeline=False)["language_name"], "Bengali"
+            language_profile("ml", require_pipeline=False)["language_name"], "Malayalam"
         )
         with self.assertRaisesRegex(ValueError, "no selected tokenizer"):
-            language_profile("bn")
+            language_profile("ml")
         for invalid in ["../en", "/en", "English", "en/../bn", "does-not-exist"]:
             with self.assertRaisesRegex(ValueError, "Unknown language"):
                 language_profile(invalid)

@@ -1,5 +1,6 @@
 """Model-free verification of exact parity and native-only sweep routing."""
 
+import argparse
 import contextlib
 from copy import deepcopy
 import importlib.util
@@ -112,6 +113,15 @@ class ComparisonTests(unittest.TestCase):
 
 
 class RoutingTests(unittest.TestCase):
+    def test_all_parity_languages_exclude_downstream_rule_tokenizers(self):
+        args = argparse.Namespace(all=True)
+        catalog = {
+            "en": {"pipeline_available": True},
+            "bn": {"pipeline_available": True, "tokenizer_kind": "bengali-rule"},
+            "ml": {"pipeline_available": False},
+        }
+        self.assertEqual(sweep._select_languages(args, catalog), ["en"])
+
     def test_native_binary_required_before_catalog_or_download(self):
         argv = [
             str(SCRIPT),

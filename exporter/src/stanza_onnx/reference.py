@@ -7,7 +7,7 @@ import unicodedata
 from . import STANZA_VERSION, UNICODE_VERSION
 from .unicode import provenance
 from .unicode_stanza import adapted_stanza, analyze
-from .catalog import language_profile
+from .catalog import language_profile, tokenizer_kind
 
 
 def normalize(document):
@@ -68,6 +68,11 @@ def _analyze_inputs(pipeline, inputs):
 
 
 def reference(language, cache_dir, input_path, output):
+    if tokenizer_kind(language) == "bengali-rule":
+        raise ValueError(
+            "Bengali uses a custom downstream rule tokenizer; no stock Stanza "
+            "Bengali reference pipeline exists. Validate it with authored rule fixtures."
+        )
     import stanza
     import torch
 

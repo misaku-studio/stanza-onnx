@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "stanza-onnx-export"
-version = "0.2.0"
+version = "0.3.0"
 description = "Export and package pinned Stanza models for portable ONNX inference"
 readme = "README.md"
 requires-python = ">=3.12"

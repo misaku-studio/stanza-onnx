@@ -1,7 +1,8 @@
 use crate::{
-    engine::SessionOptions,
+    bengali::BengaliTokenizer,
+    engine::{initialize_library, SessionOptions},
     lemma_mwt::{Lemma, Mwt},
-    manifest::{load_bundle, BundleManifest},
+    manifest::{load_bundle, BundleManifest, TokenizerKind},
     pos::Pos,
     tokenizer::Tokenizer,
     types::{convert_offsets, OffsetUnit, Sentence},
@@ -13,10 +14,14 @@ use std::path::Path;
 /// Mutably borrowing the pipeline serializes calls without a background JS runtime.
 pub struct Pipeline {
     pub manifest: BundleManifest,
-    tokenizer: Tokenizer,
+    tokenizer: PipelineTokenizer,
     mwt: Option<Mwt>,
     pos: Option<Pos>,
     lemma: Option<Lemma>,
+}
+enum PipelineTokenizer {
+    Stanza(Box<Tokenizer>),
+    BengaliRule(BengaliTokenizer),
 }
 impl Pipeline {
     pub fn load(
@@ -24,8 +29,31 @@ impl Pipeline {
         options: &SessionOptions,
         verify_integrity: bool,
     ) -> Result<Self> {
+        Self::load_with_library(model_dir, options, verify_integrity, None)
+    }
+
+    /// Choose an explicit ONNX Runtime library only when the bundle needs it.
+    /// Rule-only bundles load without touching the process-global ONNX runtime.
+    pub fn load_with_library(
+        model_dir: &Path,
+        options: &SessionOptions,
+        verify_integrity: bool,
+        library: Option<&Path>,
+    ) -> Result<Self> {
+        anyhow::ensure!(options.threads > 0, "Thread count must be positive");
+        anyhow::ensure!(
+            matches!(options.provider.as_str(), "cpu" | "coreml" | "directml"),
+            "Unsupported execution provider {}",
+            options.provider
+        );
         let (dir, manifest) = load_bundle(model_dir, verify_integrity)?;
-        let tokenizer = Tokenizer::load(&dir, options)?;
+        let tokenizer = match manifest.tokenizer_kind {
+            TokenizerKind::Stanza => {
+                initialize_library(library)?;
+                PipelineTokenizer::Stanza(Box::new(Tokenizer::load(&dir, options)?))
+            }
+            TokenizerKind::BengaliRule => PipelineTokenizer::BengaliRule(BengaliTokenizer),
+        };
         let mwt = if manifest.processors.contains_key("mwt") {
             Some(Mwt::load(&dir, options)?)
         } else {
@@ -50,7 +78,10 @@ impl Pipeline {
         })
     }
     pub fn analyze(&mut self, text: &str, offset_unit: OffsetUnit) -> Result<Vec<Sentence>> {
-        let mut sentences = self.tokenizer.process(text)?;
+        let mut sentences = match &mut self.tokenizer {
+            PipelineTokenizer::Stanza(tokenizer) => tokenizer.process(text)?,
+            PipelineTokenizer::BengaliRule(tokenizer) => tokenizer.process(text),
+        };
         if let Some(mwt) = &mut self.mwt {
             mwt.process(&mut sentences)?;
         }

@@ -2,7 +2,7 @@
 
 Recorded on 2026-10-14 for runtime 0.2.0 / Unicode 18.0.0 on macOS arm64, Apple M5 Max. The model/reference environment used Python 3.12.14, Stanza/resources 1.11.0, PyTorch 2.10.0, NumPy 2.5.4 and ONNX 1.20.1. Native inference used the standalone ONNX Runtime 1.23.2 CPU library with one inference thread.
 
-The current source passed fresh exports for all 91 pipelines. Fresh Python references were identical to the saved Unicode18 references; the refactored native runtime matched all 1,154 case/pipeline checks, including the authored matrix, Unicode edge cases and long documents. Formatting checks cover hand-written Python, JavaScript/TypeScript and Rust source.
+The runtime 0.2 release passed fresh exports for all 91 Stanza pipelines. Fresh Python references were identical to the saved Unicode18 references; the refactored native runtime matched all 1,154 case/pipeline checks, including the authored matrix, Unicode edge cases and long documents. Formatting checks cover hand-written Python, JavaScript/TypeScript and Rust source.
 
 ## Native Rust runtime
 
@@ -64,6 +64,29 @@ The all-language checks used private raw-text corpus fixtures. These third-party
 
 The shared table generator was independently checked against historical official UCD15 and UCD16 sources. Generated properties and full casing matched Python 3.12.14 and 3.14.6 respectively across all 1,112,064 Unicode scalar values, with additional FinalSigma context probes. This validates the generator against known interpreter implementations; Unicode18 behavior is derived directly from the official UCD18 sources.
 
-These are implementation and extraction parity checks, not gold linguistic-accuracy evaluations. They do not establish equivalence for every Unicode input, arbitrarily long documents, alternative upstream profiles or additional Stanza processors. The current contract uses identical native/reference tables generated from checksum-pinned official Unicode 18.0.0 data. Its reference runs Stanza 1.11.0 with an explicit Unicode18 preprocessing adaptation and unchanged neural weights; the host interpreter's Unicode version is recorded separately. Newly authored `fixtures/unicode.json` covers selected new cased letters, decimal digits, FinalSigma contexts and source offsets without normalization. Word/grapheme utilities and fallback tokenizers have not been implemented.
+These are implementation and extraction parity checks, not gold linguistic-accuracy evaluations. They do not establish equivalence for every Unicode input, arbitrarily long documents, alternative upstream profiles or additional Stanza processors. The current contract uses identical native/reference tables generated from checksum-pinned official Unicode 18.0.0 data. Its reference runs Stanza 1.11.0 with an explicit Unicode18 preprocessing adaptation and unchanged neural weights; the host interpreter's Unicode version is recorded separately. Newly authored `fixtures/unicode.json` covers selected new cased letters, decimal digits, FinalSigma contexts and source offsets without normalization. General word/grapheme utilities have not been implemented. Runtime 0.3 adds the separately tested downstream Bengali rule pack described in [Bengali](bengali.md); it has no stock Stanza reference.
 
 The complete catalog is validated on macOS arm64 CPU. GitHub Actions also passed English model export/parity, Unicode edge cases, persistent requests and the compiled JavaScript adapter on macOS and Windows. This Windows coverage is for English; native CoreML and DirectML paths and their performance remain unvalidated. The English CPU measurements above do not establish cross-language acceleration performance.
+
+## Runtime 0.3 Bengali addition
+
+On 2026-10-15, the native Bengali rule pack passed 22 authored boundary cases
+through the CLI and real Node adapter in all three offset units. Tests cover
+Unicode 18 combining marks, Indic conjuncts, emoji, quotations, decimals and
+paragraphs, plus 70 persistent protocol requests, error recovery and shutdown.
+Export ran with Python `-S`; inference ran with a deliberately invalid
+`ORT_DYLIB_PATH`, confirming that this metadata-only pack never loads ONNX Runtime.
+Bengali has no stock Stanza reference or POS/lemma model in the pinned catalog.
+
+The final 0.3 binary also retained exact output against saved Unicode18 Stanza
+references: 1,154/1,154 case/pipeline pairs across 114 language/group runs,
+covering 17,984 words. This reused existing 0.2 bundles and weights; it did not
+regenerate Stanza references. All 91 neural pipelines passed. Existing model
+property and casing table values are unchanged; the generated UCD asset adds
+categories for the downstream tokenizer. UNIC grapheme segmentation is pinned
+to the Unicode 18 fork revision described in [Bengali](bengali.md).
+
+Local checks passed: 46 Rust tests (one optional bundle audit omitted), fmt and
+clippy; 34 exporter tests including prepared English models; eight tool tests;
+and 21 subprocess adapter tests. CI has a separate model-free Bengali matrix
+for Linux, macOS and Windows.
